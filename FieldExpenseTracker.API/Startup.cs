@@ -15,7 +15,7 @@ public class Startup
 
         services.AddDbContext<AppDbContext>(options =>
         {
-            options.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection"));
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
         });
         
     }
