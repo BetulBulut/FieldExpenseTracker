@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using FieldExpenseTracker.API.Middlewares;
+using FieldExpenseTracker.Business.Mapper;
 
 namespace FieldExpenseTracker.Api;
 
@@ -104,7 +105,7 @@ public class Startup
             AppSession appSession = JwtManager.GetSession(httpContextAccessor.HttpContext);
             return appSession;
         });
-
+        services.AddAutoMapper(typeof(MapperConfig));
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
