@@ -1,5 +1,6 @@
 using FieldExpenseTracker.Data;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation.AspNetCore;
 
 namespace FieldExpenseTracker.Api;
 
@@ -10,7 +11,11 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllers();
+        services.AddControllers()
+                .AddFluentValidation(fv =>
+                {
+                    fv.RegisterValidatorsFromAssemblyContaining<EmployeeAddressRequestValidator>();
+                });
         services.AddSwaggerGen();
 
         services.AddDbContext<AppDbContext>(options =>
