@@ -7,9 +7,13 @@ namespace FieldExpenseTracker.Business.Validation
     {
         public EmployeeRequestValidator()
         {
-            RuleFor(x => x.Name)
+            RuleFor(x => x.FirstName)
                 .NotEmpty().WithMessage("Name is required.")
                 .MaximumLength(100).WithMessage("Name cannot exceed 100 characters.");
+
+            RuleFor(x => x.LastName)
+                .NotEmpty().WithMessage("Surname is required.")
+                .MaximumLength(100).WithMessage("Surname cannot exceed 100 characters.");
 
             RuleFor(x => x.Email)
                 .NotEmpty().WithMessage("Email is required.")

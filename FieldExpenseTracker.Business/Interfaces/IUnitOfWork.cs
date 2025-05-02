@@ -13,4 +13,5 @@ public interface IUnitOfWork : IDisposable
     IGenericRepository<EmployeeIBAN> EmployeeIBANRepository { get; }
     IGenericRepository<Expense> ExpenseRepository { get; }
     IGenericRepository<ExpenseCategory> ExpenseCategoryRepository { get; }
+    IGenericRepository<User> UserRepository { get; }
 }

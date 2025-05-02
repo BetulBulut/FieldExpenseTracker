@@ -26,6 +26,8 @@ public class UnitOfWork : IUnitOfWork, IDisposable
 
     public IGenericRepository<ExpenseCategory> ExpenseCategoryRepository => throw new NotImplementedException();
 
+    public IGenericRepository<User> UserRepository => throw new NotImplementedException();
+
     public async Task Complete()
     {
         using (var transaction = await context.Database.BeginTransactionAsync())
