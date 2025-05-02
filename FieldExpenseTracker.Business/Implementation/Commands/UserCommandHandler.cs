@@ -2,6 +2,7 @@ using AutoMapper;
 using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Business.Interfaces;
 using FieldExpenseTracker.Core.ApiResponse;
+using FieldExpenseTracker.Core.Helpers;
 using FieldExpenseTracker.Core.Models;
 using FieldExpenseTracker.Core.Schema;
 using MediatR;
@@ -11,9 +12,7 @@ namespace FieldExpenseTracker.Business.Implementation.Commands;
 public class UserCommandHandler :
 IRequestHandler<UpdateUserCommand, ApiResponse>,
 IRequestHandler<DeleteUserCommand, ApiResponse>,
-IRequestHandler<RegisterUserCommand, ApiResponse<UserResponse>>,
-IRequestHandler<LoginUserCommand, ApiResponse<UserResponse>>,
-IRequestHandler<LogoutUserCommand, ApiResponse>
+IRequestHandler<CreateUserCommand, ApiResponse<UserResponse>>
 {
     private readonly IUnitOfWork unitOfWork;
     private readonly IMapper mapper;
@@ -39,49 +38,6 @@ IRequestHandler<LogoutUserCommand, ApiResponse>
         return new ApiResponse();
     }
 
- 
-    public async Task<ApiResponse> Handle(LogoutUserCommand request, CancellationToken cancellationToken)
-    {
-        var users = await unitOfWork.UserRepository.GetAllAsync(x => x.UserName == request.Username);
-        var entity = users.FirstOrDefault();
-        if (entity == null)
-            return new ApiResponse("User not found");
-
-        if (!entity.IsActive)
-            return new ApiResponse("User is not active");
-
-        //logout işlemleri
-        await unitOfWork.Complete();
-        return new ApiResponse();
-    }
-
-    public async  Task<ApiResponse<UserResponse>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
-    {
-        
-        var users = await unitOfWork.UserRepository.GetAllAsync(x => x.UserName == request.Username);
-        var entity = users.FirstOrDefault();
-        if (entity == null)
-            return new ApiResponse<UserResponse>("User not found");
-
-        if (!entity.IsActive)
-            return new ApiResponse<UserResponse>("User is not active");
-
-        //login işlemleri
-        await unitOfWork.Complete();
-        var mapped = mapper.Map<UserResponse>(entity);
-        return new ApiResponse<UserResponse>(mapped);
-    }
-
-    public async Task<ApiResponse<UserResponse>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
-    {
-        var entity = mapper.Map<User>(request.User);
-        //secret ve password üreitimi
-        await unitOfWork.UserRepository.AddAsync(entity);
-        await unitOfWork.Complete();
-        var mapped = mapper.Map<UserResponse>(entity);
-        return new ApiResponse<UserResponse>(mapped);
-    }
-
     public async Task<ApiResponse> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
         var entity = await unitOfWork.UserRepository.GetByIdAsync(request.Id);
@@ -100,5 +56,21 @@ IRequestHandler<LogoutUserCommand, ApiResponse>
         unitOfWork.UserRepository.Update(entity);
         await unitOfWork.Complete();
         return new ApiResponse();
+    }
+     public async Task<ApiResponse<UserResponse>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    {
+        var mapped = mapper.Map<User>(request.User);
+        mapped.OpenDate = DateTime.Now;
+        mapped.IsActive = true;
+        mapped.Secret = PasswordGenerator.GeneratePassword(30);
+
+        var password = PasswordGenerator.GeneratePassword(6);
+        mapped.PasswordHash = PasswordGenerator.CreateMD5(password, mapped.Secret);
+
+        var entity = await unitOfWork.UserRepository.AddAsync(mapped);
+        await unitOfWork.Complete();
+        var response = mapper.Map<UserResponse>(entity);
+
+        return new ApiResponse<UserResponse>(response);
     }
 }

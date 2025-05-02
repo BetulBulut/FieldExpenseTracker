@@ -1,13 +1,21 @@
 using FieldExpenseTracker.Core.Models;
+using FieldExpenseTracker.Core.Session;
 using FieldExpenseTracker.Data.Configurations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 
 namespace FieldExpenseTracker.Data;
 
 public class AppDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+     private readonly IAppSession appSession;
+
+    public AppDbContext(DbContextOptions<AppDbContext> options, IServiceProvider serviceProvider) : base(options)
+    {
+        this.appSession = serviceProvider.GetService<IAppSession>();
+    }
+
     DbSet<Employee> Employees { get; set; }
     DbSet<EmployeeAddress> EmployeeAddresses { get; set; }
     DbSet<EmployeePhone> EmployeePhones { get; set; }
@@ -33,20 +41,20 @@ public class AppDbContext : DbContext
             if (entry.State == EntityState.Added)
             {
                 baseEntity.InsertedDate = DateTime.Now;
-                baseEntity.InsertedUser ="anonymous";
+                baseEntity.InsertedUser = appSession?.UserName ?? "anonymous";
                 baseEntity.IsActive = true;
             }
             else if (entry.State == EntityState.Modified)
             {
                 baseEntity.UpdatedDate = DateTime.Now;
-                baseEntity.UpdatedUser = "anonymous";
+                baseEntity.UpdatedUser =  appSession?.UserName ?? "anonymous";
             }
             else if (entry.State == EntityState.Deleted)
             {
                 entry.State = EntityState.Modified;
                 baseEntity.IsActive = false;
                 baseEntity.UpdatedDate = DateTime.Now;
-                baseEntity.UpdatedUser =  "anonymous";
+                baseEntity.UpdatedUser =   appSession?.UserName ?? "anonymous";
             }
         }
         return base.SaveChangesAsync(cancellationToken);

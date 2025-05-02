@@ -13,7 +13,10 @@ namespace FieldExpenseTracker.Data.Configurations
             builder.Property(e => e.Id)
                 .ValueGeneratedOnAdd()
                 .IsRequired();
-            builder.Property(e => e.Name)
+            builder.Property(e => e.FirstName)
+                .IsRequired()
+                .HasMaxLength(50);
+            builder.Property(e => e.LastName)
                 .IsRequired()
                 .HasMaxLength(50);
             builder.Property(e => e.Email)

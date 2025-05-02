@@ -33,6 +33,13 @@ public class UserController : ControllerBase
         var result = await mediator.Send(operation);
         return result;
     }
+    [HttpPost]
+    public async Task<ApiResponse<UserResponse>> Post([FromBody] UserRequest User)
+    {
+        var operation = new CreateUserCommand(User);
+        var result = await mediator.Send(operation);
+        return result;
+    }
 
     [HttpPut("{id}")]
     public async Task<ApiResponse> Put([FromRoute] int id, [FromBody] UserRequest User)
