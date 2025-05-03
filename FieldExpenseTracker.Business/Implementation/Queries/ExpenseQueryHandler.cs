@@ -2,6 +2,7 @@ using AutoMapper;
 using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Business.Interfaces;
 using FieldExpenseTracker.Core.ApiResponse;
+using FieldExpenseTracker.Core.Messages;
 using FieldExpenseTracker.Core.Schema;
 using MediatR;
 
@@ -23,7 +24,7 @@ IRequestHandler<GetExpenseByIdQuery, ApiResponse<ExpenseResponse>>
     {
         var entities = await unitOfWork.ExpenseRepository.GetAllAsync(x => x.IsActive == true);
         if (entities == null || !entities.Any())
-            return new ApiResponse<List<ExpenseResponse>>("No Expenses IBANs found");
+            return new ApiResponse<List<ExpenseResponse>>(ErrorMessages.noExpenseFound);
 
         //parametre eklenecek
         var mappedEntities = mapper.Map<List<ExpenseResponse>>(entities);
@@ -34,10 +35,10 @@ IRequestHandler<GetExpenseByIdQuery, ApiResponse<ExpenseResponse>>
     {
         var entity = await unitOfWork.ExpenseRepository.GetByIdAsync(request.Id);
         if (entity == null)
-            return new ApiResponse<ExpenseResponse>("Expense not found");
+            return new ApiResponse<ExpenseResponse>(ErrorMessages.expenseNotFound);
 
         if (!entity.IsActive)
-            return new ApiResponse<ExpenseResponse>("Expense is not active");
+            return new ApiResponse<ExpenseResponse>(ErrorMessages.expenseIsNotActive);
 
         var mappedEntity = mapper.Map<ExpenseResponse>(entity);
         return new ApiResponse<ExpenseResponse>(mappedEntity);

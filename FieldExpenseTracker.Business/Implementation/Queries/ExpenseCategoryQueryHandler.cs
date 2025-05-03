@@ -2,6 +2,7 @@ using AutoMapper;
 using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Business.Interfaces;
 using FieldExpenseTracker.Core.ApiResponse;
+using FieldExpenseTracker.Core.Messages;
 using FieldExpenseTracker.Core.Schema;
 using MediatR;
 
@@ -23,7 +24,7 @@ IRequestHandler<GetExpenseCategoryByIdQuery, ApiResponse<ExpenseCategoryResponse
     {
         var entities = await unitOfWork.ExpenseCategoryRepository.GetAllAsync(x => x.IsActive == true);
         if (entities == null || !entities.Any())
-            return new ApiResponse<List<ExpenseCategoryResponse>>("No Categories found");
+            return new ApiResponse<List<ExpenseCategoryResponse>>(ErrorMessages.noExpenseCategoryFound);
 
         //parametre eklenecek
         var mappedEntities = mapper.Map<List<ExpenseCategoryResponse>>(entities);
@@ -34,10 +35,10 @@ IRequestHandler<GetExpenseCategoryByIdQuery, ApiResponse<ExpenseCategoryResponse
     {
         var entity = await unitOfWork.ExpenseCategoryRepository.GetByIdAsync(request.Id);
         if (entity == null)
-            return new ApiResponse<ExpenseCategoryResponse>("Category not found");
+            return new ApiResponse<ExpenseCategoryResponse>(ErrorMessages.expenseCategoryNotFound);
 
         if (!entity.IsActive)
-            return new ApiResponse<ExpenseCategoryResponse>("Category is not active");
+            return new ApiResponse<ExpenseCategoryResponse>(ErrorMessages.expenseCategoryIsNotActive);
 
         var mappedEntity = mapper.Map<ExpenseCategoryResponse>(entity);
         return new ApiResponse<ExpenseCategoryResponse>(mappedEntity);

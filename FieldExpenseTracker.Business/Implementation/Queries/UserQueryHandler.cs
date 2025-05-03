@@ -2,6 +2,7 @@ using AutoMapper;
 using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Business.Interfaces;
 using FieldExpenseTracker.Core.ApiResponse;
+using FieldExpenseTracker.Core.Messages;
 using FieldExpenseTracker.Core.Schema;
 using MediatR;
 
@@ -23,7 +24,7 @@ IRequestHandler<GetUserByIdQuery, ApiResponse<UserResponse>>
     {
         var entities = await unitOfWork.UserRepository.GetAllAsync(x => x.IsActive == true);
         if (entities == null || !entities.Any())
-            return new ApiResponse<List<UserResponse>>("No users found");
+            return new ApiResponse<List<UserResponse>>(ErrorMessages.noUsersFound);
 
         //parametre eklenecek
         var mappedEntities = mapper.Map<List<UserResponse>>(entities);
@@ -34,10 +35,10 @@ IRequestHandler<GetUserByIdQuery, ApiResponse<UserResponse>>
     {
         var entity = await unitOfWork.UserRepository.GetByIdAsync(request.Id);
         if (entity == null)
-            return new ApiResponse<UserResponse>("User not found");
+            return new ApiResponse<UserResponse>(ErrorMessages.userNotFound);
 
         if (!entity.IsActive)
-            return new ApiResponse<UserResponse>("User is not active");
+            return new ApiResponse<UserResponse>(ErrorMessages.userIsNotActive);
 
         var mappedEntity = mapper.Map<UserResponse>(entity);
         return new ApiResponse<UserResponse>(mappedEntity);

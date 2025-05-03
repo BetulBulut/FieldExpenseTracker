@@ -2,6 +2,7 @@ using AutoMapper;
 using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Business.Interfaces;
 using FieldExpenseTracker.Core.ApiResponse;
+using FieldExpenseTracker.Core.Messages;
 using FieldExpenseTracker.Core.Schema;
 using MediatR;
 
@@ -23,7 +24,7 @@ IRequestHandler<GetEmployeeAddressByIdQuery, ApiResponse<EmployeeAddressResponse
     {
         var entities = await unitOfWork.EmployeeAddressRepository.GetAllAsync(x => x.IsActive == true);
         if (entities == null || !entities.Any())
-            return new ApiResponse<List<EmployeeAddressResponse>>("No Employee IAddress found");
+            return new ApiResponse<List<EmployeeAddressResponse>>(ErrorMessages.noAddressFound);
 
         //parametre eklenecek
         var mappedEntities = mapper.Map<List<EmployeeAddressResponse>>(entities);
@@ -34,10 +35,10 @@ IRequestHandler<GetEmployeeAddressByIdQuery, ApiResponse<EmployeeAddressResponse
     {
         var entity = await unitOfWork.EmployeeAddressRepository.GetByIdAsync(request.Id);
         if (entity == null)
-            return new ApiResponse<EmployeeAddressResponse>("Employee Address not found");
+            return new ApiResponse<EmployeeAddressResponse>(ErrorMessages.addressnotFound);
 
         if (!entity.IsActive)
-            return new ApiResponse<EmployeeAddressResponse>("Employee Address is not active");
+            return new ApiResponse<EmployeeAddressResponse>(ErrorMessages.addressisNotActive);
 
         var mappedEntity = mapper.Map<EmployeeAddressResponse>(entity);
         return new ApiResponse<EmployeeAddressResponse>(mappedEntity);

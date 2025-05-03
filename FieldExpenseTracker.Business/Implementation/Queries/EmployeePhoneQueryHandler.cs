@@ -2,6 +2,7 @@ using AutoMapper;
 using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Business.Interfaces;
 using FieldExpenseTracker.Core.ApiResponse;
+using FieldExpenseTracker.Core.Messages;
 using FieldExpenseTracker.Core.Schema;
 using MediatR;
 
@@ -23,7 +24,7 @@ IRequestHandler<GetEmployeePhoneByIdQuery, ApiResponse<EmployeePhoneResponse>>
     {
         var entities = await unitOfWork.EmployeePhoneRepository.GetAllAsync(x => x.IsActive == true);
         if (entities == null || !entities.Any())
-            return new ApiResponse<List<EmployeePhoneResponse>>("No Employee Phones found");
+            return new ApiResponse<List<EmployeePhoneResponse>>(ErrorMessages.noPhoneNumberFound);
 
         //parametre eklenecek
         var mappedEntities = mapper.Map<List<EmployeePhoneResponse>>(entities);
@@ -34,10 +35,10 @@ IRequestHandler<GetEmployeePhoneByIdQuery, ApiResponse<EmployeePhoneResponse>>
     {
         var entity = await unitOfWork.EmployeePhoneRepository.GetByIdAsync(request.Id);
         if (entity == null)
-            return new ApiResponse<EmployeePhoneResponse>("Employee Phone not found");
+            return new ApiResponse<EmployeePhoneResponse>(ErrorMessages.phoneNumbernotFound);
 
         if (!entity.IsActive)
-            return new ApiResponse<EmployeePhoneResponse>("Employee Phone is not active");
+            return new ApiResponse<EmployeePhoneResponse>(ErrorMessages.phoneNumberisNotActive);
 
         var mappedEntity = mapper.Map<EmployeePhoneResponse>(entity);
         return new ApiResponse<EmployeePhoneResponse>(mappedEntity);

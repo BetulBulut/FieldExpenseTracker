@@ -2,6 +2,7 @@ using AutoMapper;
 using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Business.Interfaces;
 using FieldExpenseTracker.Core.ApiResponse;
+using FieldExpenseTracker.Core.Messages;
 using FieldExpenseTracker.Core.Models;
 using FieldExpenseTracker.Core.Schema;
 using MediatR;
@@ -26,10 +27,10 @@ IRequestHandler<DeleteExpenseCategoryCommand, ApiResponse>
     {
         var entity = await unitOfWork.ExpenseCategoryRepository.GetByIdAsync(request.Id);
         if (entity == null)
-            return new ApiResponse("ExpenseCategory not found");
+            return new ApiResponse(ErrorMessages.expenseCategoryNotFound);
 
         if (!entity.IsActive)
-            return new ApiResponse("ExpenseCategory is not active");
+            return new ApiResponse(ErrorMessages.expenseCategoryIsNotActive);
 
         entity.IsActive = false;
         unitOfWork.ExpenseCategoryRepository.Update(entity);
@@ -41,10 +42,10 @@ IRequestHandler<DeleteExpenseCategoryCommand, ApiResponse>
     {
         var entity = await unitOfWork.ExpenseCategoryRepository.GetByIdAsync(request.Id);
         if (entity == null)
-            return new ApiResponse("ExpenseCategory not found");
+            return new ApiResponse(ErrorMessages.expenseCategoryNotFound);
 
         if (!entity.IsActive)
-            return new ApiResponse("ExpenseCategory is not active");
+            return new ApiResponse(ErrorMessages.expenseCategoryIsNotActive);
 
         var mapped = mapper.Map<ExpenseCategory>(request.ExpenseCategory);
         entity.Name = mapped.Name;

@@ -2,6 +2,7 @@ using AutoMapper;
 using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Business.Interfaces;
 using FieldExpenseTracker.Core.ApiResponse;
+using FieldExpenseTracker.Core.Messages;
 using FieldExpenseTracker.Core.Models;
 using FieldExpenseTracker.Core.Schema;
 using MediatR;
@@ -26,10 +27,10 @@ IRequestHandler<DeleteEmployeeAddressCommand, ApiResponse>
     {
         var entity = await unitOfWork.EmployeeAddressRepository.GetByIdAsync(request.Id);
         if (entity == null)
-            return new ApiResponse("EmployeeAddress not found");
+            return new ApiResponse(ErrorMessages.addressnotFound);
 
         if (!entity.IsActive)
-            return new ApiResponse("EmployeeAddress is not active");
+            return new ApiResponse(ErrorMessages.addressisNotActive);
 
         entity.IsActive = false;
         unitOfWork.EmployeeAddressRepository.Update(entity);
@@ -41,10 +42,10 @@ IRequestHandler<DeleteEmployeeAddressCommand, ApiResponse>
     {
         var entity = await unitOfWork.EmployeeAddressRepository.GetByIdAsync(request.Id);
         if (entity == null)
-            return new ApiResponse("EmployeeAddress not found");
+            return new ApiResponse(ErrorMessages.addressnotFound);
 
         if (!entity.IsActive)
-            return new ApiResponse("EmployeeAddress is not active");
+            return new ApiResponse(ErrorMessages.addressisNotActive);
 
         var mapped = mapper.Map<EmployeeAddress>(request.EmployeeAddress);
         entity.EmployeeId = mapped.EmployeeId;

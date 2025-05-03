@@ -2,6 +2,7 @@ using AutoMapper;
 using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Business.Interfaces;
 using FieldExpenseTracker.Core.ApiResponse;
+using FieldExpenseTracker.Core.Messages;
 using FieldExpenseTracker.Core.Models;
 using FieldExpenseTracker.Core.Schema;
 using MediatR;
@@ -26,10 +27,10 @@ IRequestHandler<DeleteExpenseCommand, ApiResponse>
     {
         var entity = await unitOfWork.ExpenseRepository.GetByIdAsync(request.Id);
         if (entity == null)
-            return new ApiResponse("Expense not found");
+            return new ApiResponse(ErrorMessages.expenseNotFound);
 
         if (!entity.IsActive)
-            return new ApiResponse("Expense is not active");
+            return new ApiResponse(ErrorMessages.expenseIsNotActive);
 
         entity.IsActive = false;
         unitOfWork.ExpenseRepository.Update(entity);
@@ -41,10 +42,10 @@ IRequestHandler<DeleteExpenseCommand, ApiResponse>
     {
         var entity = await unitOfWork.ExpenseRepository.GetByIdAsync(request.Id);
         if (entity == null)
-            return new ApiResponse("Expense not found");
+            return new ApiResponse(ErrorMessages.expenseNotFound);
 
         if (!entity.IsActive)
-            return new ApiResponse("Expense is not active");
+            return new ApiResponse(ErrorMessages.expenseIsNotActive);
 
         var mapped = mapper.Map<Expense>(request.Expense);
         entity.Amount = mapped.Amount;

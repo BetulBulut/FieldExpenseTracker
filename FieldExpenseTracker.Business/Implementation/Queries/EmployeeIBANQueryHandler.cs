@@ -2,6 +2,7 @@ using AutoMapper;
 using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Business.Interfaces;
 using FieldExpenseTracker.Core.ApiResponse;
+using FieldExpenseTracker.Core.Messages;
 using FieldExpenseTracker.Core.Schema;
 using MediatR;
 
@@ -23,7 +24,7 @@ IRequestHandler<GetEmployeeIBANByIdQuery, ApiResponse<EmployeeIBANResponse>>
     {
         var entities = await unitOfWork.EmployeeIBANRepository.GetAllAsync(x => x.IsActive == true);
         if (entities == null || !entities.Any())
-            return new ApiResponse<List<EmployeeIBANResponse>>("No Employee IBANs found");
+            return new ApiResponse<List<EmployeeIBANResponse>>(ErrorMessages.noIBANFound);
 
         //parametre eklenecek
         var mappedEntities = mapper.Map<List<EmployeeIBANResponse>>(entities);
@@ -34,10 +35,10 @@ IRequestHandler<GetEmployeeIBANByIdQuery, ApiResponse<EmployeeIBANResponse>>
     {
         var entity = await unitOfWork.EmployeeIBANRepository.GetByIdAsync(request.Id);
         if (entity == null)
-            return new ApiResponse<EmployeeIBANResponse>("Employee IBAN not found");
+            return new ApiResponse<EmployeeIBANResponse>(ErrorMessages.IBANnotFound);
 
         if (!entity.IsActive)
-            return new ApiResponse<EmployeeIBANResponse>("Employee IBAN is not active");
+            return new ApiResponse<EmployeeIBANResponse>(ErrorMessages.IBANisNotActive);
 
         var mappedEntity = mapper.Map<EmployeeIBANResponse>(entity);
         return new ApiResponse<EmployeeIBANResponse>(mappedEntity);

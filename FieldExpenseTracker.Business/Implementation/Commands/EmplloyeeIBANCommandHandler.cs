@@ -2,6 +2,7 @@ using AutoMapper;
 using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Business.Interfaces;
 using FieldExpenseTracker.Core.ApiResponse;
+using FieldExpenseTracker.Core.Messages;
 using FieldExpenseTracker.Core.Models;
 using FieldExpenseTracker.Core.Schema;
 using MediatR;
@@ -26,10 +27,10 @@ IRequestHandler<DeleteEmployeeIBANCommand, ApiResponse>
     {
         var entity = await unitOfWork.EmployeeIBANRepository.GetByIdAsync(request.Id);
         if (entity == null)
-            return new ApiResponse("EmployeeIBAN not found");
+            return new ApiResponse(ErrorMessages.IBANnotFound);
 
         if (!entity.IsActive)
-            return new ApiResponse("EmployeeIBAN is not active");
+            return new ApiResponse(ErrorMessages.IBANisNotActive);
 
         entity.IsActive = false;
         unitOfWork.EmployeeIBANRepository.Update(entity);
@@ -41,10 +42,10 @@ IRequestHandler<DeleteEmployeeIBANCommand, ApiResponse>
     {
         var entity = await unitOfWork.EmployeeIBANRepository.GetByIdAsync(request.Id);
         if (entity == null)
-            return new ApiResponse("EmployeeIBAN not found");
+            return new ApiResponse(ErrorMessages.IBANnotFound);
 
         if (!entity.IsActive)
-            return new ApiResponse("EmployeeIBAN is not active");
+            return new ApiResponse(ErrorMessages.IBANisNotActive);
 
         var mapped = mapper.Map<EmployeeIBAN>(request.EmployeeIBAN);
         entity.IBAN = mapped.IBAN;

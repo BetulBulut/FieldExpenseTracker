@@ -3,6 +3,7 @@ using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Business.Interfaces;
 using FieldExpenseTracker.Core.ApiResponse;
 using FieldExpenseTracker.Core.Helpers;
+using FieldExpenseTracker.Core.Messages;
 using FieldExpenseTracker.Core.Models;
 using FieldExpenseTracker.Core.Schema;
 using MediatR;
@@ -27,10 +28,10 @@ IRequestHandler<CreateUserCommand, ApiResponse<UserResponse>>
     {
         var entity = await unitOfWork.UserRepository.GetByIdAsync(request.Id);
         if (entity == null)
-            return new ApiResponse("User not found");
+            return new ApiResponse(ErrorMessages.userNotFound);
 
         if (!entity.IsActive)
-            return new ApiResponse("User is not active");
+            return new ApiResponse(ErrorMessages.userIsNotActive);
 
         entity.IsActive = false;
         unitOfWork.UserRepository.Update(entity);
@@ -42,23 +43,28 @@ IRequestHandler<CreateUserCommand, ApiResponse<UserResponse>>
     {
         var entity = await unitOfWork.UserRepository.GetByIdAsync(request.Id);
         if (entity == null)
-            return new ApiResponse("User not found");
+            return new ApiResponse(ErrorMessages.userNotFound);
 
         if (!entity.IsActive)
-            return new ApiResponse("User is not active");
+            return new ApiResponse(ErrorMessages.userIsNotActive);
 
         var mapped = mapper.Map<User>(request.User);
         entity.FirstName = mapped.FirstName;
         entity.LastName = mapped.LastName;
         entity.UserName = mapped.UserName;
         entity.Role = mapped.Role;
-        
+
         unitOfWork.UserRepository.Update(entity);
         await unitOfWork.Complete();
         return new ApiResponse();
     }
-     public async Task<ApiResponse<UserResponse>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+
+    public async Task<ApiResponse<UserResponse>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
+        var user = await unitOfWork.UserRepository.GetByParameterAsync(x => x.UserName == request.User.UserName && x.IsActive == true);
+        if (user != null)
+            return new ApiResponse<UserResponse>(ErrorMessages.userNameTaken);
+
         var mapped = mapper.Map<User>(request.User);
         mapped.OpenDate = DateTime.Now;
         mapped.IsActive = true;
