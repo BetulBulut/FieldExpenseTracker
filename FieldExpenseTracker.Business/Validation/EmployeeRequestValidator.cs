@@ -24,6 +24,13 @@ namespace FieldExpenseTracker.Business.Validation
 
             RuleFor(x => x.Salary)
                 .GreaterThan(0).WithMessage("Salary must be greater than 0.");
+
+            RuleFor(x => x.Department)
+                .NotEmpty().WithMessage("Department is required.")
+                .MaximumLength(50).WithMessage("Department cannot exceed 50 characters.");
+
+            RuleFor(x => x.IsManager)
+                .Must(x => x == "true" || x == "false").WithMessage("IsManager must be 'true' or 'false'.");
         }
     }
 }

@@ -2,6 +2,7 @@ using AutoMapper;
 using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Business.Interfaces;
 using FieldExpenseTracker.Core.ApiResponse;
+using FieldExpenseTracker.Core.Helpers.Employee;
 using FieldExpenseTracker.Core.Messages;
 using FieldExpenseTracker.Core.Models;
 using FieldExpenseTracker.Core.Schema;
@@ -21,6 +22,7 @@ IRequestHandler<DeleteEmployeeCommand, ApiResponse>
     {
         this.unitOfWork = unitOfWork;
         this.mapper = mapper;
+        
     }
 
     public async Task<ApiResponse> Handle(DeleteEmployeeCommand request, CancellationToken cancellationToken)
@@ -66,9 +68,46 @@ IRequestHandler<DeleteEmployeeCommand, ApiResponse>
     public async Task<ApiResponse<EmployeeResponse>> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
     {
         var entity = mapper.Map<Employee>(request.Employee);
+        entity.EmployeeNumber = EmployeeNumberGenerator.GenerateEmployeeNumber();
+
         await unitOfWork.EmployeeRepository.AddAsync(entity);
         await unitOfWork.Complete();
-        var mapped = mapper.Map<EmployeeResponse>(entity);
+
+        var employee = await unitOfWork.EmployeeRepository.GetByParameterAsync(x => x.EmployeeNumber == entity.EmployeeNumber && x.IsActive == true);
+        if (employee == null)
+            return new ApiResponse<EmployeeResponse>(ErrorMessages.employeeNotFound);
+
+        await AddEmployeePhones(employee.PhoneNumbers, employee.Id, unitOfWork.EmployeePhoneRepository);
+        await AddEmployeeAddresses(employee.Addresses, employee.Id, unitOfWork.EmployeeAddressRepository);
+        await AddEmployeeIBANs(employee.IBANs, employee.Id, unitOfWork.EmployeeIBANRepository);
+        await unitOfWork.Complete();
+        var employeeWithDetails = await unitOfWork.EmployeeRepository.GetByIdAsync(employee.Id);
+        var mapped = mapper.Map<EmployeeResponse>(employeeWithDetails);
         return new ApiResponse<EmployeeResponse>(mapped);
+    }
+
+    private async Task AddEmployeePhones(List<EmployeePhone> employeePhones, int employeeId, IGenericRepository<EmployeePhone> employeePhoneRepository)
+    {
+        foreach (var phone in employeePhones )
+        {
+            phone.EmployeeId = employeeId;
+            await employeePhoneRepository.AddAsync(phone);
+        }
+    }
+     private async Task AddEmployeeAddresses(List<EmployeeAddress> employeeAddresses, int employeeId, IGenericRepository<EmployeeAddress> employeeAddressRepository)
+    {
+        foreach (var address in employeeAddresses )
+        {
+            address.EmployeeId = employeeId;
+            await employeeAddressRepository.AddAsync(address);
+        }
+    }
+     private async Task AddEmployeeIBANs(List<EmployeeIBAN> employeeIBANs, int employeeId, IGenericRepository<EmployeeIBAN> employeeIBANRepository)
+    {
+        foreach (var iban in employeeIBANs )
+        {
+            iban.EmployeeId = employeeId;
+            await employeeIBANRepository.AddAsync(iban);
+        }
     }
 }

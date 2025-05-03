@@ -8,32 +8,28 @@ public class MapperConfig : Profile
 {
     public MapperConfig()
     {
-        // Employee Mappings
         CreateMap<Employee, EmployeeResponse>();
-        CreateMap<EmployeeRequest, Employee>();
+        CreateMap<EmployeeRequest, Employee>()
+        .ForMember(dest => dest.Addresses, opt => opt.MapFrom(src => src.Addresses))
+        .ForMember(dest => dest.PhoneNumbers, opt => opt.MapFrom(src => src.PhoneNumbers))
+        .ForMember(dest => dest.IBANs, opt => opt.MapFrom(src => src.IBANs));
 
-        // EmployeeAddress Mappings
         CreateMap<EmployeeAddress, EmployeeAddressResponse>()
             .ForMember(dest => dest.FullAddress, opt => opt.MapFrom(src => $"{src.Street}, {src.City}, {src.State}, {src.ZipCode}, {src.Country}"));
         CreateMap<EmployeeAddressRequest, EmployeeAddress>();
 
-        // EmployeePhone Mappings
         CreateMap<EmployeePhone, EmployeePhoneResponse>();
         CreateMap<EmployeePhoneRequest, EmployeePhone>();
 
-        // EmployeeIBAN Mappings
         CreateMap<EmployeeIBAN, EmployeeIBANResponse>();
         CreateMap<EmployeeIBANRequest, EmployeeIBAN>();
 
-        // Expense Mappings
         CreateMap<Expense, ExpenseResponse>();
         CreateMap<ExpenseRequest, Expense>();
 
-        // ExpenseCategory Mappings
         CreateMap<ExpenseCategory, ExpenseCategoryResponse>();
         CreateMap<ExpenseCategoryRequest, ExpenseCategory>();
 
-        // User Mappings
         CreateMap<User, UserResponse>();
         CreateMap<UserRequest, User>();
     }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FieldExpenseTracker.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialData : Migration
+    public partial class secondmig : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,12 +17,15 @@ namespace FieldExpenseTracker.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Position = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Salary = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DateOfJoining = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EmployeeNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    EmployeeNumber = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    IsManager = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    Department = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     InsertedUser = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UpdatedUser = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     InsertedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -51,31 +54,6 @@ namespace FieldExpenseTracker.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ExpenseCategories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
-                    Secret = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Role = table.Column<int>(type: "int", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    OpenDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastLoginDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    InsertedUser = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UpdatedUser = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InsertedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -161,6 +139,38 @@ namespace FieldExpenseTracker.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
+                    Secret = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    OpenDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastLoginDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false),
+                    InsertedUser = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdatedUser = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InsertedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Expenses",
                 columns: table => new
                 {
@@ -230,6 +240,11 @@ namespace FieldExpenseTracker.Data.Migrations
                 name: "IX_Expenses_ExpenseCategoryId",
                 table: "Expenses",
                 column: "ExpenseCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_EmployeeId",
+                table: "Users",
+                column: "EmployeeId");
         }
 
         /// <inheritdoc />
@@ -251,10 +266,10 @@ namespace FieldExpenseTracker.Data.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Employees");
+                name: "ExpenseCategories");
 
             migrationBuilder.DropTable(
-                name: "ExpenseCategories");
+                name: "Employees");
         }
     }
 }

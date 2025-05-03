@@ -13,25 +13,27 @@ public static class UserSeeder
             {
                 Id = 1,
                 UserName = "admin",
-                PasswordHash = "admin123", 
-                Secret = "admin-secret",
+                PasswordHash = "76c6f58ea9461f1ba60e9b85c0ef5848", //admin123
+                Secret = "bc5b9c39e2771571a6eaf9cd2a56508cd5130bf076d414aa42111136f770cb62",
                 Role = RoleEnum.Admin,
                 FirstName = "System",
                 LastName = "Administrator",
                 OpenDate = DateTime.Now,
-                LastLoginDate = null
+                LastLoginDate = null,
+                EmployeeId =1,
             },
             new User
             {
                 Id = 2,
                 UserName = "user1",
-                PasswordHash = "user123",
-                Secret = "user1-secret",
+                PasswordHash = "791782c17b595f2a44490c5430370eb5",//user123
+                Secret = "9c0cabb913d2a6a6451f4ffbdb900bd68426b5fef1e19f859d6d1bce35c768f9",
                 Role = RoleEnum.Admin,
                 FirstName = "System",
                 LastName = "Administrator",
                 OpenDate = DateTime.Now,
-                LastLoginDate = null
+                LastLoginDate = null,
+                EmployeeId = 2,
             }
         );
     }

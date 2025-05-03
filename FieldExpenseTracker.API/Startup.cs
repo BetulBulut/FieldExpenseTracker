@@ -15,6 +15,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using FieldExpenseTracker.API.Middlewares;
 using FieldExpenseTracker.Business.Mapper;
+using FieldExpenseTracker.Business.GenericRepository;
+using AutoMapper;
 
 namespace FieldExpenseTracker.Api;
 
@@ -105,7 +107,7 @@ public class Startup
             AppSession appSession = JwtManager.GetSession(httpContextAccessor.HttpContext);
             return appSession;
         });
-        services.AddAutoMapper(typeof(MapperConfig));
+         services.AddSingleton(new MapperConfiguration(x => x.AddProfile(new MapperConfig())).CreateMapper());
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

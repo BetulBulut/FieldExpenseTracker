@@ -21,6 +21,10 @@ namespace FieldExpenseTracker.Business.Validation
             RuleFor(x => x.LastName)
                 .NotEmpty().WithMessage("LastName is required.")
                 .MaximumLength(50).WithMessage("LastName cannot exceed 50 characters.");
+
+            RuleFor(x => x.EmployeeNumber)
+                .NotEmpty().WithMessage("EmployeeNumber is required.")
+                .MaximumLength(11).WithMessage("EmployeeNumber cannot exceed 11 characters.");
         }
     }
 }

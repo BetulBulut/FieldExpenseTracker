@@ -12,4 +12,6 @@ public class User : BaseModel
     public string LastName { get; set; }
     public DateTime OpenDate { get; set; }
     public DateTime? LastLoginDate { get; set; }
+    public int EmployeeId { get; set; }
+    public Employee Employee { get; set; }
 }

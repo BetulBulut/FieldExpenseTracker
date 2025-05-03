@@ -33,6 +33,11 @@ namespace FieldExpenseTracker.Data.Migrations
                     b.Property<DateTime>("DateOfJoining")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Department")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -40,8 +45,13 @@ namespace FieldExpenseTracker.Data.Migrations
 
                     b.Property<string>("EmployeeNumber")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("InsertedDate")
                         .HasColumnType("datetime2");
@@ -53,7 +63,12 @@ namespace FieldExpenseTracker.Data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name")
+                    b.Property<bool>("IsManager")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -353,6 +368,9 @@ namespace FieldExpenseTracker.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -405,6 +423,8 @@ namespace FieldExpenseTracker.Data.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Users", (string)null);
                 });
@@ -459,6 +479,17 @@ namespace FieldExpenseTracker.Data.Migrations
                     b.Navigation("Employee");
 
                     b.Navigation("ExpenseCategory");
+                });
+
+            modelBuilder.Entity("FieldExpenseTracker.Core.Models.User", b =>
+                {
+                    b.HasOne("FieldExpenseTracker.Core.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("FieldExpenseTracker.Core.Models.Employee", b =>

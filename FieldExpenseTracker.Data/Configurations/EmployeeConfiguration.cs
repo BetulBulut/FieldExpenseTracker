@@ -29,9 +29,15 @@ namespace FieldExpenseTracker.Data.Configurations
                 .HasColumnType("decimal(18,2)");
             builder.Property(e => e.DateOfJoining)
                 .IsRequired();
+            builder.Property(e => e.IsManager)
+                .IsRequired()
+                .HasDefaultValue(false);
+            builder.Property(e => e.Department)
+                .IsRequired()
+                .HasMaxLength(50);
             builder.Property(e => e.EmployeeNumber)
                 .IsRequired()
-                .HasMaxLength(20);
+                .HasMaxLength(11);
 
             builder.HasIndex(e => e.EmployeeNumber)
                     .IsUnique();

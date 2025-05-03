@@ -9,6 +9,8 @@ namespace FieldExpenseTracker.Core.Models
         public decimal Salary { get; set; }
         public DateTime DateOfJoining { get; set; }
         public string EmployeeNumber { get; set; }
+        public bool IsManager { get; set; }
+        public string Department { get; set; }
         public List<EmployeePhone> PhoneNumbers { get; set; }
         public List<EmployeeAddress> Addresses { get; set; }
         public List<EmployeeIBAN> IBANs { get; set; }
