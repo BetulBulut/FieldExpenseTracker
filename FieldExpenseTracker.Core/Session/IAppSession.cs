@@ -10,5 +10,6 @@ public interface IAppSession
     public string UserRole { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
+    public int EmployeeId { get; set; }
     public HttpContext HttpContext { get; set; }
 }

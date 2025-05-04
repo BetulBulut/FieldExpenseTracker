@@ -17,6 +17,8 @@ namespace FieldExpenseTracker.Core.Models
         public string ExpenseNumber { get; set; }
         public int ResponsedByUserId { get; set; } 
         public string ResponsedByUserName { get; set; } 
+        public string ResponseDescription { get; set; }
+        public DateTime? ResponseDate { get; set; }
     }
     
 }

@@ -21,6 +21,11 @@ public static class UserSeeder
                 OpenDate = DateTime.Now,
                 LastLoginDate = null,
                 EmployeeId =1,
+                InsertedDate = DateTime.Now,
+                InsertedUser = "system",
+                UpdatedDate = DateTime.Now,
+                UpdatedUser = "system",
+                IsActive = true,
             },
             new User
             {
@@ -28,12 +33,17 @@ public static class UserSeeder
                 UserName = "user1",
                 PasswordHash = "791782c17b595f2a44490c5430370eb5",//user123
                 Secret = "9c0cabb913d2a6a6451f4ffbdb900bd68426b5fef1e19f859d6d1bce35c768f9",
-                Role = RoleEnum.Admin,
+                Role = RoleEnum.Employee,
                 FirstName = "System",
                 LastName = "Administrator",
                 OpenDate = DateTime.Now,
                 LastLoginDate = null,
                 EmployeeId = 2,
+                InsertedDate = DateTime.Now,
+                InsertedUser = "system",
+                UpdatedDate = DateTime.Now,
+                UpdatedUser = "system",
+                IsActive = true,
             }
         );
     }

@@ -33,7 +33,7 @@ IRequestHandler<GetEmployeeByIdQuery, ApiResponse<EmployeeResponse>>
 
     public async Task<ApiResponse<EmployeeResponse>> Handle(GetEmployeeByIdQuery request, CancellationToken cancellationToken)
     {
-        var entity = await unitOfWork.EmployeeRepository.GetByIdAsync(request.Id);
+        var entity = await unitOfWork.EmployeeRepository.GetByIdAsync(request.Id,"PhoneNumbers", "Addresses", "IBANs");
         if (entity == null)
             return new ApiResponse<EmployeeResponse>(ErrorMessages.employeeNotFound);
 

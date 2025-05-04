@@ -30,7 +30,15 @@ namespace FieldExpenseTracker.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(10);
             builder.Property(e => e.ResponsedByUserName)
+                .IsRequired(false)
                 .HasMaxLength(100);
+            builder.Property(e => e.ResponsedByUserId)
+                .HasDefaultValue(0);
+            builder.Property(e => e.ResponseDescription)
+                .IsRequired(false)
+                .HasMaxLength(500);
+            builder.Property(e => e.ResponseDate)
+                .IsRequired(false);
             builder.Property(e => e.Status)
                 .IsRequired()
                 .HasConversion<int>();

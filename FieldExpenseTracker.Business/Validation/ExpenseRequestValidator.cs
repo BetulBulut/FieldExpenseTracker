@@ -19,9 +19,6 @@ namespace FieldExpenseTracker.Business.Validation
 
             RuleFor(x => x.ExpenseCategoryId)
                 .GreaterThan(0).WithMessage("ExpenseCategoryId must be greater than 0.");
-
-            RuleFor(x => x.EmployeeId)
-                .GreaterThan(0).WithMessage("EmployeeId must be greater than 0.");
         }
     }
 }

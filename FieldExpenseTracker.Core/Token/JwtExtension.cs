@@ -19,6 +19,7 @@ public static class JwtManager
         session.UserRole = GetClaimValue(claims, "Role");
         session.FirstName = GetClaimValue(claims, "FirstName");
         session.LastName = GetClaimValue(claims, "LastName");
+        session.EmployeeId = int.TryParse(GetClaimValue(claims, "EmployeeId"), out var employeeId) ? employeeId : 0;
         session.Token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
         session.HttpContext = context;
         return session;

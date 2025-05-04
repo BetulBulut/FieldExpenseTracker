@@ -1,6 +1,7 @@
 using FieldExpenseTracker.Core.Models;
 using FieldExpenseTracker.Core.Session;
 using FieldExpenseTracker.Data.Configurations;
+using FieldExpenseTracker.Data.Seeds;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,6 +28,9 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(EmployeeConfiguration).Assembly);
+        EmployeeSeeder.Seed(modelBuilder);
+        ExpenseCategorySeeder.Seed(modelBuilder);
+        UserSeeder.Seed(modelBuilder);
         base.OnModelCreating(modelBuilder);
     }
 
@@ -43,6 +47,8 @@ public class AppDbContext : DbContext
                 baseEntity.InsertedDate = DateTime.Now;
                 baseEntity.InsertedUser = appSession?.UserName ?? "anonymous";
                 baseEntity.IsActive = true;
+                baseEntity.UpdatedDate = DateTime.Now;
+                baseEntity.UpdatedUser = appSession?.UserName ?? "anonymous";
             }
             else if (entry.State == EntityState.Modified)
             {

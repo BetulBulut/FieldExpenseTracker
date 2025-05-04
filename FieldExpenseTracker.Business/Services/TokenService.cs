@@ -47,7 +47,9 @@ public class TokenService : ITokenService
             new Claim("LastName", user.LastName),
             new Claim("UserName", user.UserName),
             new Claim("UserId", user.Id.ToString()),
+            new Claim("EmployeeId", user.EmployeeId.ToString()),
             new Claim("Secret", user.Secret),
+            new Claim("Roles", user.Role.ToString()),
             new Claim(ClaimTypes.Role, user.Role.ToString())
         };
 

@@ -7,6 +7,6 @@ namespace FieldExpenseTracker.Business.Implementation.Cqrs;
 
 public record UpdateUserCommand(int Id, UserRequest User) : IRequest<ApiResponse>;
 public record DeleteUserCommand(int Id) : IRequest<ApiResponse>;
-public record CreateUserCommand(UserRequest User) : IRequest<ApiResponse<UserResponse>>;
+public record CreateUserCommand(UserRequest User) : IRequest<ApiResponse<UserRegisterResponse>>;
 public record GetAllUsersByParameterQuery() : IRequest<ApiResponse<List<UserResponse>>>; //parametre eklenecek
 public record GetUserByIdQuery(int Id) : IRequest<ApiResponse<UserResponse>>;

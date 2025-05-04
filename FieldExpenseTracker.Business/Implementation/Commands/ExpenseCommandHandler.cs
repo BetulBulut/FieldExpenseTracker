@@ -2,9 +2,12 @@ using AutoMapper;
 using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Business.Interfaces;
 using FieldExpenseTracker.Core.ApiResponse;
+using FieldExpenseTracker.Core.Enums;
+using FieldExpenseTracker.Core.Helpers.Expense;
 using FieldExpenseTracker.Core.Messages;
 using FieldExpenseTracker.Core.Models;
 using FieldExpenseTracker.Core.Schema;
+using FieldExpenseTracker.Core.Session;
 using MediatR;
 
 namespace FieldExpenseTracker.Business.Implementation.Commands;
@@ -12,15 +15,18 @@ namespace FieldExpenseTracker.Business.Implementation.Commands;
 public class ExpenseCommandHandler :
 IRequestHandler<CreateExpenseCommand, ApiResponse<ExpenseResponse>>,
 IRequestHandler<UpdateExpenseCommand, ApiResponse>,
-IRequestHandler<DeleteExpenseCommand, ApiResponse>
+IRequestHandler<DeleteExpenseCommand, ApiResponse>,
+IRequestHandler<RespondExpenseCommand, ApiResponse<ExpenseResponse>>
 {
     private readonly IUnitOfWork unitOfWork;
     private readonly IMapper mapper;
+    private readonly IAppSession appSession;
 
-    public ExpenseCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+    public ExpenseCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAppSession appSession)
     {
         this.unitOfWork = unitOfWork;
         this.mapper = mapper;
+        this.appSession = appSession;
     }
 
     public async Task<ApiResponse> Handle(DeleteExpenseCommand request, CancellationToken cancellationToken)
@@ -67,8 +73,32 @@ IRequestHandler<DeleteExpenseCommand, ApiResponse>
     public async Task<ApiResponse<ExpenseResponse>> Handle(CreateExpenseCommand request, CancellationToken cancellationToken)
     {
         var entity = mapper.Map<Expense>(request.Expense);
+        entity.ExpenseNumber=ExpenseNumberGenerator.GenerateExpenseNumber();
+        entity.EmployeeId = appSession.EmployeeId;
+        entity.Status = StatusEnum.Pending;
         await unitOfWork.ExpenseRepository.AddAsync(entity);
         await unitOfWork.Complete();
+        var mapped = mapper.Map<ExpenseResponse>(entity);
+        return new ApiResponse<ExpenseResponse>(mapped);
+    }
+
+    public async Task<ApiResponse<ExpenseResponse>> Handle(RespondExpenseCommand request, CancellationToken cancellationToken)
+    {
+        var entity = unitOfWork.ExpenseRepository.GetByIdAsync(request.id).Result;
+        if (entity == null)
+            return new ApiResponse<ExpenseResponse>(ErrorMessages.expenseNotFound);
+
+        if (!entity.IsActive)
+            return new ApiResponse<ExpenseResponse>(ErrorMessages.expenseIsNotActive);
+
+        entity.Status = request.Expense.Approve? StatusEnum.Approved : StatusEnum.Rejected;
+        //approve ise ödeme yap
+        entity.ResponsedByUserId = int.Parse(appSession.UserId);
+        entity.ResponsedByUserName = appSession.UserName;
+        entity.ResponseDate = DateTime.Now;
+        entity.ResponseDescription = request.Expense.ResponseDescription;
+        unitOfWork.ExpenseRepository.Update(entity);
+        unitOfWork.Complete();
         var mapped = mapper.Map<ExpenseResponse>(entity);
         return new ApiResponse<ExpenseResponse>(mapped);
     }

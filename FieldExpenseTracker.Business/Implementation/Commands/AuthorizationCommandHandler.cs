@@ -37,7 +37,7 @@ public class AuthorizationCommandHandler :
             return new ApiResponse<AuthorizationResponse>(ErrorMessages.incorrectUserNameOrPassword);
 
         var hashedPassword = PasswordGenerator.CreateMD5(request.Request.Password, user.Secret);
-        if (hashedPassword != user.PasswordHash)
+        if (hashedPassword.ToUpper() != user.PasswordHash.ToUpper())
             return new ApiResponse<AuthorizationResponse>(ErrorMessages.incorrectUserNameOrPassword);
 
         var token = tokenService.GenerateToken(user);
@@ -47,7 +47,9 @@ public class AuthorizationCommandHandler :
             Token = token,
             Expiration = DateTime.UtcNow.AddMinutes(jwtConfig.AccessTokenExpiration)
         };
-
+        user.LastLoginDate = DateTime.Now;
+        unitOfWork.UserRepository.Update(user);
+        await unitOfWork.Complete();
         return new ApiResponse<AuthorizationResponse>(entity);
     }
 
@@ -57,7 +59,7 @@ public class AuthorizationCommandHandler :
         if (user == null)
             return new ApiResponse(ErrorMessages.userNotFound);
 
-        //logout işlemi yapılacak
+        //Token blacklist iplemente edilebilir
         await unitOfWork.Complete();
         return new ApiResponse(SuccessMessages.userLoggedOutSuccessfully);
     }
@@ -76,6 +78,7 @@ public class AuthorizationCommandHandler :
         user.PasswordHash = newHashedPassword;
         unitOfWork.UserRepository.Update(user);
         await unitOfWork.Complete();
+        //send email with new password (not implemented here)
         return new ApiResponse(SuccessMessages.passwordChangedSuccessfully);
     }
 

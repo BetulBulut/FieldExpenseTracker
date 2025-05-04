@@ -1,3 +1,4 @@
+using FieldExpenseTracker.Business.GenericRepository;
 using FieldExpenseTracker.Business.Interfaces;
 using FieldExpenseTracker.Core.Models;
 using FieldExpenseTracker.Data;
@@ -14,19 +15,19 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         this.context = context;
     }
 
-    public IGenericRepository<Employee> EmployeeRepository => throw new NotImplementedException();
+    public IGenericRepository<Employee> EmployeeRepository => new GenericRepository<Employee>(context);
 
-    public IGenericRepository<EmployeeAddress> EmployeeAddressRepository => throw new NotImplementedException();
+    public IGenericRepository<EmployeeAddress> EmployeeAddressRepository => new GenericRepository<EmployeeAddress>(context);
 
-    public IGenericRepository<EmployeePhone> EmployeePhoneRepository => throw new NotImplementedException();
+    public IGenericRepository<EmployeePhone> EmployeePhoneRepository => new GenericRepository<EmployeePhone>(context);
 
-    public IGenericRepository<EmployeeIBAN> EmployeeIBANRepository => throw new NotImplementedException();
+    public IGenericRepository<EmployeeIBAN> EmployeeIBANRepository => new GenericRepository<EmployeeIBAN>(context);
 
-    public IGenericRepository<Expense> ExpenseRepository => throw new NotImplementedException();
+    public IGenericRepository<Expense> ExpenseRepository => new GenericRepository<Expense>(context);
 
-    public IGenericRepository<ExpenseCategory> ExpenseCategoryRepository => throw new NotImplementedException();
+    public IGenericRepository<ExpenseCategory> ExpenseCategoryRepository => new GenericRepository<ExpenseCategory>(context);
 
-    public IGenericRepository<User> UserRepository => throw new NotImplementedException();
+    public IGenericRepository<User> UserRepository => new GenericRepository<User>(context);
 
     public async Task Complete()
     {

@@ -24,6 +24,8 @@ public static class EmployeeSeeder
                 IsActive = true,
                 InsertedDate = DateTime.Now,
                 InsertedUser = "system",
+                UpdatedDate = DateTime.Now,
+                UpdatedUser = "system",
             },
             new Employee
             {
@@ -39,7 +41,9 @@ public static class EmployeeSeeder
                 Department = "IT",
                 IsActive = true,
                 InsertedDate = DateTime.Now,
-                InsertedUser = "system"
+                InsertedUser = "system",
+                UpdatedDate = DateTime.Now,
+                UpdatedUser = "system",
             }
         );
     }

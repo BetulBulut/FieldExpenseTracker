@@ -13,7 +13,7 @@ namespace FieldExpenseTracker.Business.Implementation.Commands;
 public class UserCommandHandler :
 IRequestHandler<UpdateUserCommand, ApiResponse>,
 IRequestHandler<DeleteUserCommand, ApiResponse>,
-IRequestHandler<CreateUserCommand, ApiResponse<UserResponse>>
+IRequestHandler<CreateUserCommand, ApiResponse<UserRegisterResponse>>
 {
     private readonly IUnitOfWork unitOfWork;
     private readonly IMapper mapper;
@@ -59,15 +59,15 @@ IRequestHandler<CreateUserCommand, ApiResponse<UserResponse>>
         return new ApiResponse();
     }
 
-    public async Task<ApiResponse<UserResponse>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    public async Task<ApiResponse<UserRegisterResponse>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var user = await unitOfWork.UserRepository.GetByParameterAsync(x => x.UserName == request.User.UserName && x.IsActive == true);
         if (user != null)
-            return new ApiResponse<UserResponse>(ErrorMessages.userNameTaken);
+            return new ApiResponse<UserRegisterResponse>(ErrorMessages.userNameTaken);
 
         var employee = await unitOfWork.EmployeeRepository.GetByParameterAsync(x => x.EmployeeNumber == request.User.EmployeeNumber && x.IsActive == true);
         if (employee == null)
-            return new ApiResponse<UserResponse>(ErrorMessages.employeeNotFound);
+            return new ApiResponse<UserRegisterResponse>(ErrorMessages.employeeNotFound);
         var mapped = mapper.Map<User>(request.User);
         mapped.OpenDate = DateTime.Now;
         mapped.IsActive = true;
@@ -76,11 +76,12 @@ IRequestHandler<CreateUserCommand, ApiResponse<UserResponse>>
         mapped.LastLoginDate = null;
         var password = PasswordGenerator.GeneratePassword(6);
         mapped.PasswordHash = PasswordGenerator.CreateMD5(password, mapped.Secret);
-
+        //passwordu gönder
         var entity = await unitOfWork.UserRepository.AddAsync(mapped);
         await unitOfWork.Complete();
-        var response = mapper.Map<UserResponse>(entity);
-
-        return new ApiResponse<UserResponse>(response);
+        var response = mapper.Map<UserRegisterResponse>(entity);
+        response.Password = password;
+        response.EmployeeNumber = employee.EmployeeNumber;
+        return new ApiResponse<UserRegisterResponse>(response);
     }
 }

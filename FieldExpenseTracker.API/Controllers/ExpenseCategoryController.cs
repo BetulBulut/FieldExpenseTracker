@@ -19,7 +19,7 @@ public class ExpenseCategoryController : ControllerBase
     }
 
     [HttpGet("GetAll")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Employee")]
     public async Task<ApiResponse<List<ExpenseCategoryResponse>>> GetAllByParameter()
     {
         var operation = new GetAllExpenseCategorysByParameterQuery();

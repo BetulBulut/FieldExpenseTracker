@@ -34,7 +34,7 @@ public class UserController : ControllerBase
         return result;
     }
     [HttpPost]
-    public async Task<ApiResponse<UserResponse>> Post([FromBody] UserRequest User)
+    public async Task<ApiResponse<UserRegisterResponse>> Post([FromBody] UserRequest User)
     {
         var operation = new CreateUserCommand(User);
         var result = await mediator.Send(operation);

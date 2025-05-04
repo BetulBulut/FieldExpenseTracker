@@ -10,9 +10,6 @@ namespace FieldExpenseTracker.Core.Schema
         public string Department { get; set; }
         public string IsManager { get; set; }
         public DateTime DateOfJoining { get; set; }
-        public List<EmployeePhoneRequest> PhoneNumbers { get; set; }
-        public List<EmployeeAddressRequest> Addresses { get; set; }
-        public List<EmployeeIBANRequest> IBANs { get; set; }
     }
     
     public class EmployeeResponse : BaseResponse
@@ -25,5 +22,9 @@ namespace FieldExpenseTracker.Core.Schema
         public DateTime DateOfJoining { get; set; }
         public string Department { get; set; }
         public string EmployeeNumber { get; set; }
+        public string IsManager { get; set; }
+        public List<EmployeePhoneResponse> PhoneNumbers { get; set; }
+        public List<EmployeeAddressResponse> Addresses { get; set; }
+        public List<EmployeeIBANResponse> IBANs { get; set; }
     }
 }
