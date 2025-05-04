@@ -5,7 +5,7 @@ using MediatR;
 
 namespace FieldExpenseTracker.Business.Implementation.Cqrs;
 
-public record GetAllExpenseCategorysByParameterQuery() : IRequest<ApiResponse<List<ExpenseCategoryResponse>>>;//parametre eklenecek
+public record GetAllExpenseCategorysQuery() : IRequest<ApiResponse<List<ExpenseCategoryResponse>>>;
 public record GetExpenseCategoryByIdQuery(int Id) : IRequest<ApiResponse<ExpenseCategoryResponse>>;
 public record CreateExpenseCategoryCommand(ExpenseCategoryRequest ExpenseCategory) : IRequest<ApiResponse<ExpenseCategoryResponse>>;
 public record UpdateExpenseCategoryCommand(int Id, ExpenseCategoryRequest ExpenseCategory) : IRequest<ApiResponse>;

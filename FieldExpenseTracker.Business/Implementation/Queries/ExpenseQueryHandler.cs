@@ -6,10 +6,13 @@ using FieldExpenseTracker.Core.Enums;
 using FieldExpenseTracker.Core.Messages;
 using FieldExpenseTracker.Core.Schema;
 using MediatR;
+using LinqKit;
+using FieldExpenseTracker.Core.Models;
 
 namespace FieldExpenseTracker.Business.Implementation.Queries;
 public class ExpenseQueryHandler :
 IRequestHandler<GetAllExpensesByParameterQuery, ApiResponse<List<ExpenseResponse>>>,
+IRequestHandler<GetAllExpensesQuery, ApiResponse<List<ExpenseResponse>>>,
 IRequestHandler<GetExpenseByIdQuery, ApiResponse<ExpenseResponse>>,
 IRequestHandler<GetExpenseByEmployeeIdQuery, ApiResponse<List<ExpenseResponse>>>,
 IRequestHandler<GetPendingExpenses, ApiResponse<List<ExpenseResponse>>>
@@ -23,13 +26,35 @@ IRequestHandler<GetPendingExpenses, ApiResponse<List<ExpenseResponse>>>
         this.mapper = mapper;
     }
 
-    public async Task<ApiResponse<List<ExpenseResponse>>> Handle(GetAllExpensesByParameterQuery request, CancellationToken cancellationToken)
+    public async Task<ApiResponse<List<ExpenseResponse>>> Handle(GetAllExpensesQuery request, CancellationToken cancellationToken)
     {
         var entities = await unitOfWork.ExpenseRepository.GetAllAsync(x => x.IsActive == true);
         if (entities == null || !entities.Any())
             return new ApiResponse<List<ExpenseResponse>>(ErrorMessages.noExpenseFound);
 
-        //parametre eklenecek
+        var mappedEntities = mapper.Map<List<ExpenseResponse>>(entities);
+        return new ApiResponse<List<ExpenseResponse>>(mappedEntities);
+    }
+    
+    public async Task<ApiResponse<List<ExpenseResponse>>> Handle(GetAllExpensesByParameterQuery request, CancellationToken cancellationToken)
+    {
+        var expenseCategory = (await unitOfWork.ExpenseCategoryRepository.Where(x => x.Name == request.ExpenseCategory)).FirstOrDefault();
+        var predicate = PredicateBuilder.New<Expense>(true);
+        if (request.ExpenseNumber != null)
+            predicate = predicate.And(x => x.ExpenseNumber == request.ExpenseNumber);
+        if (request.ExpenseCategory != null)
+            predicate = predicate.And(x => x.ExpenseCategoryId == expenseCategory.Id);
+        if (request.Description != null)
+            predicate = predicate.And(x => x.Description == request.Description);
+        if (request.Amount != null)
+            predicate = predicate.And(x => x.Amount == request.Amount);
+        if (request.ResponsedByUserName != null)
+            predicate = predicate.And(x => x.ResponsedByUserName == request.ResponsedByUserName);
+
+        var entities = await unitOfWork.ExpenseRepository.GetAllAsync(predicate, "Employee", "ExpenseCategory");
+        if (entities == null || !entities.Any())
+            return new ApiResponse<List<ExpenseResponse>>(ErrorMessages.noExpenseFound);
+
         var mappedEntities = mapper.Map<List<ExpenseResponse>>(entities);
         return new ApiResponse<List<ExpenseResponse>>(mappedEntities);
     }

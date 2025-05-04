@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace Ots.Api.Controllers;
+namespace FieldExpenseTracker.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -19,13 +19,20 @@ public class EmployeeAddressController : ControllerBase
     }
 
     [HttpGet("GetAll")]
-    public async Task<ApiResponse<List<EmployeeAddressResponse>>> GetAllByParameter()
+    public async Task<ApiResponse<List<EmployeeAddressResponse>>> GetAll()
     {
-        var operation = new GetAllEmployeeAddressesByParameterQuery();
+        var operation = new GetAllEmployeeAddressesQuery();
         var result = await mediator.Send(operation);
         return result;
     }
-
+    [HttpGet("GetAllByParameter")]
+    public async Task<ApiResponse<List<EmployeeAddressResponse>>> GetAllByParameter([FromQuery] string? street, [FromQuery] string? city, [FromQuery] string? state, [FromQuery] string? country)
+    {
+        var operation = new GetAllEmployeeAddressesByParameterQuery(street, city, country, state);
+        var result = await mediator.Send(operation);
+        return result;
+    }
+    
     [HttpGet("GetById/{id}")]
     public async Task<ApiResponse<EmployeeAddressResponse>> GetById([FromRoute] int id)
     {

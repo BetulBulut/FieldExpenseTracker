@@ -2,11 +2,10 @@ using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Core.ApiResponse;
 using FieldExpenseTracker.Core.Schema;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace Ots.Api.Controllers;
+namespace FieldExpenseTracker.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -19,9 +18,9 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("GetAll")]
-    public async Task<ApiResponse<List<UserResponse>>> GetAllByParameter()
+    public async Task<ApiResponse<List<UserResponse>>> GetAll()
     {
-        var operation = new GetAllUsersByParameterQuery();
+        var operation = new GetAllUsersQuery();
         var result = await mediator.Send(operation);
         return result;
     }
@@ -30,6 +29,13 @@ public class UserController : ControllerBase
     public async Task<ApiResponse<UserResponse>> GetById([FromRoute] int id)
     {
         var operation = new GetUserByIdQuery(id);
+        var result = await mediator.Send(operation);
+        return result;
+    }
+    [HttpGet("GetByEmployeeNumber")]
+    public async Task<ApiResponse<UserResponse>> GetByEmployeeNumber([FromQuery] string employeeNumber)
+    {
+        var operation = new GetUserByEmployeeNumberQuery(employeeNumber);
         var result = await mediator.Send(operation);
         return result;
     }

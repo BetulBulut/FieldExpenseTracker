@@ -12,7 +12,7 @@ using Microsoft.Extensions.Caching.Distributed;
 
 namespace FieldExpenseTracker.Business.Implementation.Queries;
 public class ExpenseCategoryQueryHandler :
-IRequestHandler<GetAllExpenseCategorysByParameterQuery, ApiResponse<List<ExpenseCategoryResponse>>>,
+IRequestHandler<GetAllExpenseCategorysQuery, ApiResponse<List<ExpenseCategoryResponse>>>,
 IRequestHandler<GetExpenseCategoryByIdQuery, ApiResponse<ExpenseCategoryResponse>>
 {
     private readonly IUnitOfWork unitOfWork;
@@ -27,7 +27,7 @@ IRequestHandler<GetExpenseCategoryByIdQuery, ApiResponse<ExpenseCategoryResponse
         this.distributedCache = distributedCache;
     }
 
-    public async Task<ApiResponse<List<ExpenseCategoryResponse>>> Handle(GetAllExpenseCategorysByParameterQuery request, CancellationToken cancellationToken)
+    public async Task<ApiResponse<List<ExpenseCategoryResponse>>> Handle(GetAllExpenseCategorysQuery request, CancellationToken cancellationToken)
     {
         var cashResult = await distributedCache.GetAsync(cacheKey);
         if (cashResult != null)

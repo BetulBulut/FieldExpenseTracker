@@ -5,8 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-
-namespace Ots.Api.Controllers;
+namespace FieldExpenseTracker.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -21,7 +20,7 @@ public class EmployeePhoneController : ControllerBase
     [HttpGet("GetAll")]
     public async Task<ApiResponse<List<EmployeePhoneResponse>>> GetAllByParameter()
     {
-        var operation = new GetAllEmployeePhonesByParameterQuery();
+        var operation = new GetAllEmployeePhonesQuery();
         var result = await mediator.Send(operation);
         return result;
     }
@@ -56,5 +55,4 @@ public class EmployeePhoneController : ControllerBase
         var result = await mediator.Send(operation);
         return result;
     }
-
 }

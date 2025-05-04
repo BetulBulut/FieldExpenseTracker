@@ -8,7 +8,7 @@ using MediatR;
 
 namespace FieldExpenseTracker.Business.Implementation.Queries;
 public class EmployeePhoneQueryHandler :
-IRequestHandler<GetAllEmployeePhonesByParameterQuery, ApiResponse<List<EmployeePhoneResponse>>>,
+IRequestHandler<GetAllEmployeePhonesQuery, ApiResponse<List<EmployeePhoneResponse>>>,
 IRequestHandler<GetEmployeePhoneByIdQuery, ApiResponse<EmployeePhoneResponse>>
 {
     private readonly IUnitOfWork unitOfWork;
@@ -20,7 +20,7 @@ IRequestHandler<GetEmployeePhoneByIdQuery, ApiResponse<EmployeePhoneResponse>>
         this.mapper = mapper;
     }
 
-    public async Task<ApiResponse<List<EmployeePhoneResponse>>> Handle(GetAllEmployeePhonesByParameterQuery request, CancellationToken cancellationToken)
+    public async Task<ApiResponse<List<EmployeePhoneResponse>>> Handle(GetAllEmployeePhonesQuery request, CancellationToken cancellationToken)
     {
         var entities = await unitOfWork.EmployeePhoneRepository.GetAllAsync(x => x.IsActive == true);
         if (entities == null || !entities.Any())

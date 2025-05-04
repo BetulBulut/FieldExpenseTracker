@@ -78,7 +78,7 @@ public class Startup
 
         services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "OTS Api Management", Version = "v1.0" });
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Field Expense Tracker", Version = "v1.0" });
             var securityScheme = new OpenApiSecurityScheme
             {
                 Name = "Para Management for IT Company",

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace Ots.Api.Controllers;
+namespace FieldExpenseTracker.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -21,7 +21,7 @@ public class EmployeeIBANController : ControllerBase
     [HttpGet("GetAll")]
     public async Task<ApiResponse<List<EmployeeIBANResponse>>> GetAllByParameter()
     {
-        var operation = new GetAllEmployeeIBANsByParameterQuery();
+        var operation = new GetAllEmployeeIBANsQuery();
         var result = await mediator.Send(operation);
         return result;
     }

@@ -5,8 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-
-namespace Ots.Api.Controllers;
+namespace FieldExpenseTracker.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -19,13 +18,20 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpGet("GetAll")]
-    public async Task<ApiResponse<List<EmployeeResponse>>> GetAllByParameter()
+    public async Task<ApiResponse<List<EmployeeResponse>>> GetAll()
     {
-        var operation = new GetAllEmployeesByParameterQuery();
+        var operation = new GetAllEmployeesQuery();
         var result = await mediator.Send(operation);
         return result;
     }
-
+    [HttpGet("GetAllByParameter")]
+    public async Task<ApiResponse<List<EmployeeResponse>>> GetAllByParameter([FromQuery] string? firstName, [FromQuery] string? lastName, [FromQuery] string? position, [FromQuery] string? department)
+    {
+        var operation = new GetAllEmployeesByParameterQuery(firstName, lastName, position, department);
+        var result = await mediator.Send(operation);
+        return result;
+    }
+    
     [HttpGet("GetById/{id}")]
     public async Task<ApiResponse<EmployeeResponse>> GetById([FromRoute] int id)
     {

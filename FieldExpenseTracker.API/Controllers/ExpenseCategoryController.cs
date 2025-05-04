@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace Ots.Api.Controllers;
+namespace FieldExpenseTracker.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -20,9 +20,9 @@ public class ExpenseCategoryController : ControllerBase
 
     [HttpGet("GetAll")]
     [Authorize(Roles = "Admin,Employee")]
-    public async Task<ApiResponse<List<ExpenseCategoryResponse>>> GetAllByParameter()
+    public async Task<ApiResponse<List<ExpenseCategoryResponse>>> GetAll()
     {
-        var operation = new GetAllExpenseCategorysByParameterQuery();
+        var operation = new GetAllExpenseCategorysQuery();
         var result = await mediator.Send(operation);
         return result;
     }
