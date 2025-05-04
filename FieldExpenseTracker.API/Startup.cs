@@ -17,6 +17,7 @@ using FieldExpenseTracker.API.Middlewares;
 using FieldExpenseTracker.Business.Mapper;
 using FieldExpenseTracker.Business.GenericRepository;
 using AutoMapper;
+using StackExchange.Redis;
 
 namespace FieldExpenseTracker.Api;
 
@@ -30,7 +31,7 @@ public class Startup
     {
         JwtConfig = Configuration.GetSection("JwtConfig").Get<JwtConfig>();
         services.AddSingleton<JwtConfig>(JwtConfig);
-
+    
         services.AddControllers()
                 .AddFluentValidation(fv =>
                 {
@@ -64,6 +65,15 @@ public class Startup
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.FromMinutes(2)
             };
+        });
+        
+         var resdisConnection = new ConfigurationOptions();
+        resdisConnection.EndPoints.Add(Configuration["Redis:Host"], Convert.ToInt32(Configuration["Redis:Port"]));
+        resdisConnection.DefaultDatabase = 0;
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.ConfigurationOptions = resdisConnection;
+            options.InstanceName = Configuration["Redis:InstanceName"];
         });
 
         services.AddSwaggerGen(c =>

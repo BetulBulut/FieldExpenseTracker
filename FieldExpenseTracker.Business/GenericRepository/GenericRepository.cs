@@ -81,4 +81,9 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         query = includes.Aggregate(query, (current, inc) => EntityFrameworkQueryableExtensions.Include(current, inc));
         return EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(query, predicate);
     }
+
+    public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate)
+    {
+        return await context.Set<TEntity>().AnyAsync(predicate);
+    }
 }

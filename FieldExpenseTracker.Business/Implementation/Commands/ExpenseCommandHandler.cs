@@ -91,7 +91,7 @@ IRequestHandler<RespondExpenseCommand, ApiResponse<ExpenseResponse>>
         if (!entity.IsActive)
             return new ApiResponse<ExpenseResponse>(ErrorMessages.expenseIsNotActive);
 
-        entity.Status = request.Expense.Approve? StatusEnum.Approved : StatusEnum.Rejected;
+        entity.Status = request.Expense.Approve==true? StatusEnum.Approved : StatusEnum.Rejected;
         //approve ise ödeme yap
         entity.ResponsedByUserId = int.Parse(appSession.UserId);
         entity.ResponsedByUserName = appSession.UserName;
@@ -100,6 +100,7 @@ IRequestHandler<RespondExpenseCommand, ApiResponse<ExpenseResponse>>
         unitOfWork.ExpenseRepository.Update(entity);
         unitOfWork.Complete();
         var mapped = mapper.Map<ExpenseResponse>(entity);
+        mapped.StatusName = entity.Status.ToString();
         return new ApiResponse<ExpenseResponse>(mapped);
     }
 }

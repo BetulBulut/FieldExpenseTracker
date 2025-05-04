@@ -26,6 +26,8 @@ public class ErrorMessages
     public const string expenseNotFound = "Expense not found";
     public const string noExpenseFound = "No expenses found";
     public const string expenseIsNotActive = "Expense is not active";
+    public const string employeeHasDependencies = "Employee has dependencies";
+    public const string expenseCategoryHasDependencies = "Expense category has dependencies";
 }
 public class SuccessMessages
 {
