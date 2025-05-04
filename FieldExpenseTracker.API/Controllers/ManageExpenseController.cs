@@ -33,9 +33,9 @@ public class ManageExpenseController : ControllerBase
     
     [HttpGet("GetAllByParameter")]
     [Authorize(Roles = "Admin,Employee")]
-    public async Task<ApiResponse<List<ExpenseResponse>>> GetAllByParameter([FromQuery] string? ExpenseNumber, [FromQuery] string? Description, [FromQuery] string? ExpenseCategory, [FromQuery] int? Amount, [FromQuery] string? ResponsedByUserName)
+    public async Task<ApiResponse<List<ExpenseResponse>>> GetAllByParameter([FromQuery] int? EmployeeId, [FromQuery] string? ExpenseNumber, [FromQuery] string? Description, [FromQuery] string? ExpenseCategory, [FromQuery] int? Amount, [FromQuery] string? ResponsedByUserName)
     {
-        var operation = new GetAllExpensesByParameterQuery(ExpenseNumber, Description, ExpenseCategory, Amount, ResponsedByUserName);
+        var operation = new GetAllExpensesByParameterQuery(EmployeeId,ExpenseNumber, Description, ExpenseCategory, Amount, ResponsedByUserName);
         var result = await mediator.Send(operation);
         return result;
     }

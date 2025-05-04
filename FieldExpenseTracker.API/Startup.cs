@@ -18,6 +18,8 @@ using FieldExpenseTracker.Business.Mapper;
 using FieldExpenseTracker.Business.GenericRepository;
 using AutoMapper;
 using StackExchange.Redis;
+using MediatR;
+using FieldExpenseTracker.API.BackgroundServices;
 
 namespace FieldExpenseTracker.Api;
 
@@ -38,7 +40,7 @@ public class Startup
                     fv.RegisterValidatorsFromAssemblyContaining<EmployeeAddressRequestValidator>();
                 });
         services.AddSwaggerGen();
-        services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(CreateEmployeeCommand).GetTypeInfo().Assembly));
+        services.AddMediatR(typeof(CreateEmployeeCommand).GetTypeInfo().Assembly);
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddDbContext<AppDbContext>(options =>
@@ -99,6 +101,8 @@ public class Startup
                     { securityScheme, new string[] { } }
             });
         });
+        services.AddHostedService<ExpenseCreatedConsumer>();
+        services.AddScoped<IEmailService, EmailService>();
 
         services.AddCors(options =>
         {

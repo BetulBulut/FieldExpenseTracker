@@ -24,10 +24,9 @@ public class ExpenseController : ControllerBase
 
     [HttpGet("GetMyExpenses")]
     [Authorize(Roles = "Admin,Employee")]
-    public async Task<ApiResponse<List<ExpenseResponse>>> GetMyExpenses()
-    {
-        var employeeId= appSession.EmployeeId;
-        var operation = new GetExpenseByEmployeeIdQuery(employeeId);
+    public async Task<ApiResponse<List<ExpenseResponse>>> GetMyExpenses( [FromQuery] string? ExpenseNumber, [FromQuery] string? Description, [FromQuery] string? ExpenseCategory, [FromQuery] int? Amount, [FromQuery] string? ResponsedByUserName)
+    {   var employeeId = appSession.EmployeeId;
+        var operation = new GetAllExpensesByParameterQuery(employeeId, ExpenseNumber, Description, ExpenseCategory, Amount, ResponsedByUserName);
         var result = await mediator.Send(operation);
         return result;
     }
@@ -37,6 +36,14 @@ public class ExpenseController : ControllerBase
     public async Task<ApiResponse<ExpenseResponse>> Post([FromBody] ExpenseRequest Expense)
     {
         var operation = new CreateExpenseCommand(Expense);
+        var result = await mediator.Send(operation);
+        return result;
+    }
+    [HttpPost("CreateMultipleExpenses")]
+    [Authorize(Roles = "Admin,Employee")]
+    public async Task<ApiResponse<CreateMultipleExpenseResponse>> CreateMultipleExpenses([FromBody] List<ExpenseRequest> Expenses)
+    {
+        var operation = new CreateMultipleExpenseCommand(new CreateMultipleExpenseRequest { Expenses = Expenses });
         var result = await mediator.Send(operation);
         return result;
     }

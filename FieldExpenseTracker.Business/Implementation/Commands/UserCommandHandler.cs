@@ -1,6 +1,7 @@
 using AutoMapper;
 using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Business.Interfaces;
+using FieldExpenseTracker.Business.Messaging;
 using FieldExpenseTracker.Core.ApiResponse;
 using FieldExpenseTracker.Core.Helpers;
 using FieldExpenseTracker.Core.Messages;
@@ -17,11 +18,13 @@ IRequestHandler<CreateUserCommand, ApiResponse<UserRegisterResponse>>
 {
     private readonly IUnitOfWork unitOfWork;
     private readonly IMapper mapper;
+    private readonly IEventPublisher eventPublisher;
 
-    public UserCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+    public UserCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IEventPublisher eventPublisher)
     {
         this.unitOfWork = unitOfWork;
         this.mapper = mapper;
+        this.eventPublisher = eventPublisher;
     }
 
     public async Task<ApiResponse> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
@@ -79,8 +82,14 @@ IRequestHandler<CreateUserCommand, ApiResponse<UserRegisterResponse>>
         //passwordu gönder
         var entity = await unitOfWork.UserRepository.AddAsync(mapped);
         await unitOfWork.Complete();
+        await eventPublisher.PublishUserCreatedOrPasswordReset(new UserCreatedOrPasswordResetEvent
+        {
+            Email = user.Email,
+            FullName = user.FirstName + " " + user.LastName,
+            Password = password,
+            Subject = SuccessMessages.yourPasswordDeclaredSuccessfully
+        });
         var response = mapper.Map<UserRegisterResponse>(entity);
-        response.Password = password;
         response.EmployeeNumber = employee.EmployeeNumber;
         return new ApiResponse<UserRegisterResponse>(response);
     }

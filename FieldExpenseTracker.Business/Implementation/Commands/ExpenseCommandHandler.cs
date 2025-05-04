@@ -16,17 +16,20 @@ public class ExpenseCommandHandler :
 IRequestHandler<CreateExpenseCommand, ApiResponse<ExpenseResponse>>,
 IRequestHandler<UpdateExpenseCommand, ApiResponse>,
 IRequestHandler<DeleteExpenseCommand, ApiResponse>,
-IRequestHandler<RespondExpenseCommand, ApiResponse<ExpenseResponse>>
+IRequestHandler<RespondExpenseCommand, ApiResponse<ExpenseResponse>>,
+IRequestHandler<CreateMultipleExpenseCommand, ApiResponse<CreateMultipleExpenseResponse>>
 {
     private readonly IUnitOfWork unitOfWork;
     private readonly IMapper mapper;
     private readonly IAppSession appSession;
+    private readonly IEventPublisher eventPublisher;
 
-    public ExpenseCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAppSession appSession)
+    public ExpenseCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAppSession appSession, IEventPublisher eventPublisher)
     {
         this.unitOfWork = unitOfWork;
         this.mapper = mapper;
         this.appSession = appSession;
+        this.eventPublisher = eventPublisher;
     }
 
     public async Task<ApiResponse> Handle(DeleteExpenseCommand request, CancellationToken cancellationToken)
@@ -78,6 +81,13 @@ IRequestHandler<RespondExpenseCommand, ApiResponse<ExpenseResponse>>
         entity.Status = StatusEnum.Pending;
         await unitOfWork.ExpenseRepository.AddAsync(entity);
         await unitOfWork.Complete();
+        eventPublisher.PublishExpenseCreated(new ExpenseCreatedEvent
+        {
+            EmployeeName = appSession.UserName,
+            Amount = entity.Amount,
+            Description = entity.Description,
+            CreatedAt = DateTime.Now
+        });
         var mapped = mapper.Map<ExpenseResponse>(entity);
         return new ApiResponse<ExpenseResponse>(mapped);
     }
@@ -99,8 +109,26 @@ IRequestHandler<RespondExpenseCommand, ApiResponse<ExpenseResponse>>
         entity.ResponseDescription = request.Expense.ResponseDescription;
         unitOfWork.ExpenseRepository.Update(entity);
         unitOfWork.Complete();
+
         var mapped = mapper.Map<ExpenseResponse>(entity);
         mapped.StatusName = entity.Status.ToString();
         return new ApiResponse<ExpenseResponse>(mapped);
+    }
+
+    public async Task<ApiResponse<CreateMultipleExpenseResponse>> Handle(CreateMultipleExpenseCommand request, CancellationToken cancellationToken)
+    {
+        var entity = mapper.Map<List<Expense>>(request.Expenses);
+        if (entity == null || entity.Count == 0)
+            return new ApiResponse<CreateMultipleExpenseResponse>(ErrorMessages.expenseNotFound);
+        foreach (var item in entity)
+        {
+            item.EmployeeId = appSession.EmployeeId;
+            item.Status = StatusEnum.Pending;
+            item.ExpenseNumber = ExpenseNumberGenerator.GenerateExpenseNumber();
+            await unitOfWork.ExpenseRepository.AddAsync(item);
+        }
+        unitOfWork.Complete();
+        var mapped = mapper.Map<CreateMultipleExpenseResponse>(entity);
+        return new ApiResponse<CreateMultipleExpenseResponse>(mapped);
     }
 }

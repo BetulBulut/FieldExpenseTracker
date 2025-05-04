@@ -1,6 +1,7 @@
 using AutoMapper;
 using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Business.Interfaces;
+using FieldExpenseTracker.Business.Messaging;
 using FieldExpenseTracker.Business.Services;
 using FieldExpenseTracker.Core.ApiResponse;
 using FieldExpenseTracker.Core.Helpers;
@@ -8,6 +9,7 @@ using FieldExpenseTracker.Core.Messages;
 using FieldExpenseTracker.Core.Schema;
 using FieldExpenseTracker.Core.Token;
 using MediatR;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace FieldExpenseTracker.Business.Implementation.Commands;
 
@@ -21,13 +23,15 @@ public class AuthorizationCommandHandler :
     private readonly IMapper mapper;
     private readonly ITokenService tokenService;
     private readonly JwtConfig jwtConfig;
+    private readonly IEventPublisher eventPublisher;
 
-    public AuthorizationCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, ITokenService tokenService, JwtConfig jwtConfig)
+    public AuthorizationCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, ITokenService tokenService, JwtConfig jwtConfig, IEventPublisher eventPublisher)
     {
         this.unitOfWork = unitOfWork;
         this.mapper = mapper;
         this.tokenService = tokenService;
         this.jwtConfig = jwtConfig;
+        this.eventPublisher = eventPublisher;
     }
      public async Task<ApiResponse<AuthorizationResponse>> Handle(CreateAuthorizationTokenCommand request, CancellationToken cancellationToken)
     {
@@ -78,7 +82,7 @@ public class AuthorizationCommandHandler :
         user.PasswordHash = newHashedPassword;
         unitOfWork.UserRepository.Update(user);
         await unitOfWork.Complete();
-        //send email with new password (not implemented here)
+        
         return new ApiResponse(SuccessMessages.passwordChangedSuccessfully);
     }
 
@@ -94,7 +98,13 @@ public class AuthorizationCommandHandler :
         unitOfWork.UserRepository.Update(user);
         await unitOfWork.Complete();
 
-        // Send email with new password (not implemented here)
+        await eventPublisher.PublishUserCreatedOrPasswordReset(new UserCreatedOrPasswordResetEvent
+        {
+            Email = user.Email,
+            FullName = user.FirstName + " " + user.LastName,
+            Password = newPassword,
+            Subject = SuccessMessages.yourPasswordResetSuccessfully
+        });
         return new ApiResponse(SuccessMessages.passwordResetLinkSent);
     }
 }

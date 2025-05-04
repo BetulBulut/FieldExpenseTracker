@@ -36,4 +36,13 @@ namespace FieldExpenseTracker.Core.Schema
         public string ResponseDescription { get; set; }
         public bool Approve { get; set; }
     }
+
+    public class CreateMultipleExpenseRequest : BaseRequest
+    {
+        public List<ExpenseRequest> Expenses { get; set; }
+    }
+    public class CreateMultipleExpenseResponse : BaseResponse
+    {
+        public List<ExpenseResponse> Expenses { get; set; }
+    }
 }

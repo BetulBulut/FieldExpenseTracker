@@ -40,6 +40,8 @@ IRequestHandler<GetPendingExpenses, ApiResponse<List<ExpenseResponse>>>
     {
         var expenseCategory = (await unitOfWork.ExpenseCategoryRepository.Where(x => x.Name == request.ExpenseCategory)).FirstOrDefault();
         var predicate = PredicateBuilder.New<Expense>(true);
+        if (request.EmployeeId != null)
+            predicate = predicate.And(x => x.EmployeeId == request.EmployeeId);
         if (request.ExpenseNumber != null)
             predicate = predicate.And(x => x.ExpenseNumber == request.ExpenseNumber);
         if (request.ExpenseCategory != null)

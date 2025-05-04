@@ -34,5 +34,7 @@ public class SuccessMessages
     public const string userLoggedOutSuccessfully = "User logged out successfully";
     public const string passwordChangedSuccessfully = "Password changed successfully";
     public const string passwordResetLinkSent = "Password reset link sent to your email address";
+    public const string yourPasswordDeclaredSuccessfully = "Your Password declared succesfully.";
+    public const string yourPasswordResetSuccessfully = "Your Password reset successfully.";
 }
 

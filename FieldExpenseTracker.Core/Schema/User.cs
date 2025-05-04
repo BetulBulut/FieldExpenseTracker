@@ -26,7 +26,6 @@ public class UserRegisterResponse : BaseResponse
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string EmployeeNumber { get; set; }
-    public string Password { get; set; }
     public DateTime OpenDate { get; set; }
     public DateTime? LastLoginDate { get; set; }
 }

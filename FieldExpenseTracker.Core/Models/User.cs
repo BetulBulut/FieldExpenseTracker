@@ -6,6 +6,7 @@ public class User : BaseModel
 {
     public string UserName { get; set; }
     public string PasswordHash { get; set; }
+    public string Email { get; set; }
     public string Secret { get; set; }
     public RoleEnum Role { get; set; }
     public string FirstName { get; set; }
