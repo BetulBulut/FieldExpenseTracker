@@ -52,6 +52,9 @@ public class MapperConfig : Profile
         CreateMap<ExpenseCategory, ExpenseCategoryResponse>();
         CreateMap<ExpenseCategoryRequest, ExpenseCategory>();
 
+        CreateMap<PaymentMethod, PaymentMethodResponse>();
+        CreateMap<PaymentMethodRequest, PaymentMethod>();
+
         // User mappings
         CreateMap<User, UserResponse>();
         CreateMap<User, UserRegisterResponse>();

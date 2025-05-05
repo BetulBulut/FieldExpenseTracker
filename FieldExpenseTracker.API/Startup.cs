@@ -21,6 +21,10 @@ using StackExchange.Redis;
 using MediatR;
 using FieldExpenseTracker.API.BackgroundServices;
 using FieldExpenseTracker.Business.Messaging;
+using System.Data;
+using Microsoft.Data.SqlClient;
+using FieldExpenseTracker.Data.Reports;
+
 
 
 namespace FieldExpenseTracker.Api;
@@ -79,7 +83,8 @@ public class Startup
             options.ConfigurationOptions = resdisConnection;
             options.InstanceName = Configuration["Redis:InstanceName"];
         });
-
+        
+        services.AddScoped<IPaymentService, PaymentService>();
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Field Expense Tracker", Version = "v1.0" });
@@ -103,6 +108,12 @@ public class Startup
                     { securityScheme, new string[] { } }
             });
         });
+        services.AddScoped<IReportRepository, ReportRepository>();
+        services.AddTransient<IDbConnection>(sp =>
+        {
+            var connectionString = sp.GetRequiredService<IConfiguration>().GetConnectionString("DefaultConnection");
+            return new SqlConnection(connectionString);
+        });
         services.AddHostedService<ExpenseCreatedConsumer>();
         services.AddTransient<IEmailService, EmailService>();
         services.AddScoped<IEventPublisher, EventPublisher>();
@@ -116,7 +127,6 @@ public class Startup
                         .AllowAnyHeader();
                 });
         });
-
         services.AddScoped<IAppSession>(provider =>
         {
             var httpContextAccessor = provider.GetService<IHttpContextAccessor>();

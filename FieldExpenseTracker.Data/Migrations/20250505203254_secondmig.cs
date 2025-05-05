@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FieldExpenseTracker.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class initialmig : Migration
+    public partial class secondmig : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,6 +56,25 @@ namespace FieldExpenseTracker.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ExpenseCategories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PaymentMethods",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    InsertedUser = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdatedUser = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InsertedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PaymentMethods", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -183,6 +202,7 @@ namespace FieldExpenseTracker.Data.Migrations
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ExpenseCategoryId = table.Column<int>(type: "int", nullable: false),
+                    PaymentMethodId = table.Column<int>(type: "int", nullable: false),
                     ReceiptImagePath = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
@@ -213,6 +233,12 @@ namespace FieldExpenseTracker.Data.Migrations
                         principalTable: "ExpenseCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Expenses_PaymentMethods_PaymentMethodId",
+                        column: x => x.PaymentMethodId,
+                        principalTable: "PaymentMethods",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -230,24 +256,36 @@ namespace FieldExpenseTracker.Data.Migrations
                 columns: new[] { "Id", "Description", "InsertedDate", "InsertedUser", "IsActive", "Name", "UpdatedDate", "UpdatedUser" },
                 values: new object[,]
                 {
-                    { 1, "Expenses related to travel and transportation.", new DateTime(2025, 5, 5, 10, 35, 29, 545, DateTimeKind.Local).AddTicks(4273), "system", true, "Travel", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8218), "system" },
-                    { 2, "Expenses related to meals and dining.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8234), "system", true, "Food", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8235), "system" },
-                    { 3, "Expenses for office-related supplies and equipment.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8236), "system", true, "Office Supplies", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8237), "system" },
-                    { 4, "Expenses for entertainment and team-building activities.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8238), "system", true, "Entertainment", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8239), "system" },
-                    { 5, "Expenses for utilities such as electricity and water.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8240), "system", true, "Utilities", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8241), "system" },
-                    { 6, "Other expenses that do not fit into the above categories.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8242), "system", true, "Miscellaneous", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8242), "system" },
-                    { 7, "Expenses related to training and development.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8244), "system", true, "Training", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8244), "system" },
-                    { 8, "Expenses related to marketing and advertising.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8245), "system", true, "Marketing", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8246), "system" },
-                    { 9, "Expenses for entertaining clients or customers.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8247), "system", true, "Client Entertainment", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8248), "system" },
-                    { 10, "Expenses related to health and safety measures.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8249), "system", true, "Health & Safety", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8250), "system" },
-                    { 11, "Expenses for repairs and maintenance of equipment.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8251), "system", true, "Repairs & Maintenance", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8252), "system" },
-                    { 12, "Expenses related to insurance premiums.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8253), "system", true, "Insurance", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8253), "system" },
-                    { 13, "Expenses for shipping and delivery services.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8255), "system", true, "Shipping & Delivery", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8255), "system" },
-                    { 14, "Expenses for subscriptions to services or publications.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8257), "system", true, "Subscriptions", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8257), "system" },
-                    { 15, "Expenses for professional services such as consulting.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8258), "system", true, "Professional Fees", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8259), "system" },
-                    { 16, "Expenses related to research and development activities.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8260), "system", true, "Research & Development", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8261), "system" },
-                    { 17, "Expenses related to legal services and consultations.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8262), "system", true, "Legal", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8263), "system" },
-                    { 18, "Expenses for telecommunications services.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8264), "system", true, "Telecommunications", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8264), "system" }
+                    { 1, "Expenses related to travel and transportation.", new DateTime(2025, 5, 5, 23, 32, 53, 622, DateTimeKind.Local).AddTicks(2973), "system", true, "Travel", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7736), "system" },
+                    { 2, "Expenses related to meals and dining.", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7754), "system", true, "Food", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7755), "system" },
+                    { 3, "Expenses for office-related supplies and equipment.", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7783), "system", true, "Office Supplies", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7784), "system" },
+                    { 4, "Expenses for entertainment and team-building activities.", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7785), "system", true, "Entertainment", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7786), "system" },
+                    { 5, "Expenses for utilities such as electricity and water.", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7787), "system", true, "Utilities", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7788), "system" },
+                    { 6, "Other expenses that do not fit into the above categories.", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7789), "system", true, "Miscellaneous", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7789), "system" },
+                    { 7, "Expenses related to training and development.", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7791), "system", true, "Training", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7791), "system" },
+                    { 8, "Expenses related to marketing and advertising.", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7792), "system", true, "Marketing", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7793), "system" },
+                    { 9, "Expenses for entertaining clients or customers.", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7794), "system", true, "Client Entertainment", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7795), "system" },
+                    { 10, "Expenses related to health and safety measures.", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7796), "system", true, "Health & Safety", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7797), "system" },
+                    { 11, "Expenses for repairs and maintenance of equipment.", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7798), "system", true, "Repairs & Maintenance", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7798), "system" },
+                    { 12, "Expenses related to insurance premiums.", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7800), "system", true, "Insurance", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7800), "system" },
+                    { 13, "Expenses for shipping and delivery services.", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7801), "system", true, "Shipping & Delivery", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7802), "system" },
+                    { 14, "Expenses for subscriptions to services or publications.", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7803), "system", true, "Subscriptions", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7804), "system" },
+                    { 15, "Expenses for professional services such as consulting.", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7805), "system", true, "Professional Fees", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7805), "system" },
+                    { 16, "Expenses related to research and development activities.", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7807), "system", true, "Research & Development", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7807), "system" },
+                    { 17, "Expenses related to legal services and consultations.", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7808), "system", true, "Legal", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7809), "system" },
+                    { 18, "Expenses for telecommunications services.", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7810), "system", true, "Telecommunications", new DateTime(2025, 5, 5, 23, 32, 53, 623, DateTimeKind.Local).AddTicks(7811), "system" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PaymentMethods",
+                columns: new[] { "Id", "Description", "InsertedDate", "InsertedUser", "IsActive", "Name", "UpdatedDate", "UpdatedUser" },
+                values: new object[,]
+                {
+                    { 1, "Credit card payment method", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "system", false, "Credit Card", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "system" },
+                    { 2, "Debit card payment method", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "system", false, "Debit Card", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "system" },
+                    { 3, "Cash payment method", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "system", false, "Cash", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "system" },
+                    { 4, "Bank transfer payment method", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "system", false, "Bank Transfer", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "system" },
+                    { 5, "Other payment method", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "system", false, "Other", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "system" }
                 });
 
             migrationBuilder.InsertData(
@@ -291,6 +329,11 @@ namespace FieldExpenseTracker.Data.Migrations
                 column: "ExpenseCategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Expenses_PaymentMethodId",
+                table: "Expenses",
+                column: "PaymentMethodId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_EmployeeId",
                 table: "Users",
                 column: "EmployeeId");
@@ -316,6 +359,9 @@ namespace FieldExpenseTracker.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "ExpenseCategories");
+
+            migrationBuilder.DropTable(
+                name: "PaymentMethods");
 
             migrationBuilder.DropTable(
                 name: "Employees");

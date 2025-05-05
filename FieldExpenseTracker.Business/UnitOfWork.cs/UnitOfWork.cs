@@ -28,6 +28,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     public IGenericRepository<ExpenseCategory> ExpenseCategoryRepository => new GenericRepository<ExpenseCategory>(context);
 
     public IGenericRepository<User> UserRepository => new GenericRepository<User>(context);
+    public IGenericRepository<PaymentMethod> PaymentMethodRepository => new GenericRepository<PaymentMethod>(context);
 
     public async Task Complete()
     {

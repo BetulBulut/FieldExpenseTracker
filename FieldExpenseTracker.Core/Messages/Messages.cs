@@ -28,6 +28,11 @@ public class ErrorMessages
     public const string expenseIsNotActive = "Expense is not active";
     public const string employeeHasDependencies = "Employee has dependencies";
     public const string expenseCategoryHasDependencies = "Expense category has dependencies";
+    public const string paymentMethodHasDependencies = "Payment Method has dependencies";
+    public const string paymentMethodNotFound = "Payment Method not found";
+    public const string noPaymentMethodFound = "No Payment Method found";
+    public const string paymentMethodIsNotActive = "Payment Method is not active";
+    public const string noDataFound = "No data found";
 }
 public class SuccessMessages
 {

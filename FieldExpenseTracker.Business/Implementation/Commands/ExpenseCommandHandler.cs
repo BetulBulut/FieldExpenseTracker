@@ -1,6 +1,7 @@
 using AutoMapper;
 using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Business.Interfaces;
+using FieldExpenseTracker.Business.Services;
 using FieldExpenseTracker.Core.ApiResponse;
 using FieldExpenseTracker.Core.Enums;
 using FieldExpenseTracker.Core.Events;
@@ -10,6 +11,7 @@ using FieldExpenseTracker.Core.Models;
 using FieldExpenseTracker.Core.Schema;
 using FieldExpenseTracker.Core.Session;
 using MediatR;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace FieldExpenseTracker.Business.Implementation.Commands;
 
@@ -24,13 +26,15 @@ IRequestHandler<CreateMultipleExpenseCommand, ApiResponse<CreateMultipleExpenseR
     private readonly IMapper mapper;
     private readonly IAppSession appSession;
     private readonly IEventPublisher eventPublisher;
+    private readonly IPaymentService paymentService;
 
-    public ExpenseCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAppSession appSession, IEventPublisher eventPublisher)
+    public ExpenseCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAppSession appSession, IEventPublisher eventPublisher, IPaymentService paymentService)
     {
         this.unitOfWork = unitOfWork;
         this.mapper = mapper;
         this.appSession = appSession;
         this.eventPublisher = eventPublisher;
+        this.paymentService = paymentService;
     }
 
     public async Task<ApiResponse> Handle(DeleteExpenseCommand request, CancellationToken cancellationToken)
@@ -102,14 +106,17 @@ IRequestHandler<CreateMultipleExpenseCommand, ApiResponse<CreateMultipleExpenseR
         if (!entity.IsActive)
             return new ApiResponse<ExpenseResponse>(ErrorMessages.expenseIsNotActive);
 
-        entity.Status = request.Expense.Approve==true? StatusEnum.Approved : StatusEnum.Rejected;
-        //approve ise ödeme yap
+        entity.Status = request.Expense.Approve==true? StatusEnum.Approved : StatusEnum.Rejected;        
         entity.ResponsedByUserId = int.Parse(appSession.UserId);
         entity.ResponsedByUserName = appSession.UserName;
         entity.ResponseDate = DateTime.Now;
         entity.ResponseDescription = request.Expense.ResponseDescription;
         unitOfWork.ExpenseRepository.Update(entity);
         unitOfWork.Complete();
+        if (entity.Status == StatusEnum.Approved)
+        {
+            paymentService.SimulatePayment(entity);
+        }
 
         var mapped = mapper.Map<ExpenseResponse>(entity);
         mapped.StatusName = entity.Status.ToString();
