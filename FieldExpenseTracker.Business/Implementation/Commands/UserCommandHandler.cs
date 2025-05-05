@@ -2,12 +2,15 @@ using AutoMapper;
 using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Business.Interfaces;
 using FieldExpenseTracker.Business.Messaging;
+using FieldExpenseTracker.Business.Services;
 using FieldExpenseTracker.Core.ApiResponse;
 using FieldExpenseTracker.Core.Helpers;
 using FieldExpenseTracker.Core.Messages;
 using FieldExpenseTracker.Core.Models;
 using FieldExpenseTracker.Core.Schema;
+using MailKit.Security;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 
 namespace FieldExpenseTracker.Business.Implementation.Commands;
 
@@ -19,12 +22,16 @@ IRequestHandler<CreateUserCommand, ApiResponse<UserRegisterResponse>>
     private readonly IUnitOfWork unitOfWork;
     private readonly IMapper mapper;
     private readonly IEventPublisher eventPublisher;
+    private readonly IEmailService _emailService;
+    private readonly IConfiguration _configuration;
 
-    public UserCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IEventPublisher eventPublisher)
+    public UserCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IEventPublisher eventPublisher, IEmailService emailService, IConfiguration configuration)
     {
         this.unitOfWork = unitOfWork;
         this.mapper = mapper;
         this.eventPublisher = eventPublisher;
+        this._emailService = emailService;
+        this._configuration = configuration;
     }
 
     public async Task<ApiResponse> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
@@ -79,18 +86,13 @@ IRequestHandler<CreateUserCommand, ApiResponse<UserRegisterResponse>>
         mapped.LastLoginDate = null;
         var password = PasswordGenerator.GeneratePassword(6);
         mapped.PasswordHash = PasswordGenerator.CreateMD5(password, mapped.Secret);
-        //passwordu gönder
         var entity = await unitOfWork.UserRepository.AddAsync(mapped);
         await unitOfWork.Complete();
-        await eventPublisher.PublishUserCreatedOrPasswordReset(new UserCreatedOrPasswordResetEvent
-        {
-            Email = user.Email,
-            FullName = user.FirstName + " " + user.LastName,
-            Password = password,
-            Subject = SuccessMessages.yourPasswordDeclaredSuccessfully
-        });
+        
+        await _emailService.SendEmailAsync(entity.Email, SuccessMessages.yourPasswordDeclaredSuccessfully,"your password is:"+ password);
         var response = mapper.Map<UserRegisterResponse>(entity);
         response.EmployeeNumber = employee.EmployeeNumber;
         return new ApiResponse<UserRegisterResponse>(response);
     }
+    
 }

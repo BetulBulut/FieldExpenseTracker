@@ -20,6 +20,8 @@ using AutoMapper;
 using StackExchange.Redis;
 using MediatR;
 using FieldExpenseTracker.API.BackgroundServices;
+using FieldExpenseTracker.Business.Messaging;
+
 
 namespace FieldExpenseTracker.Api;
 
@@ -102,8 +104,8 @@ public class Startup
             });
         });
         services.AddHostedService<ExpenseCreatedConsumer>();
-        services.AddScoped<IEmailService, EmailService>();
-
+        services.AddTransient<IEmailService, EmailService>();
+        services.AddScoped<IEventPublisher, EventPublisher>();
         services.AddCors(options =>
         {
             options.AddPolicy("AllowAll",

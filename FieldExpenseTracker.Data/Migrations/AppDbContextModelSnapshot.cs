@@ -17,7 +17,7 @@ namespace FieldExpenseTracker.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.13")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -104,14 +104,14 @@ namespace FieldExpenseTracker.Data.Migrations
                             Email = "first.admin@example.com",
                             EmployeeNumber = "EMP001",
                             FirstName = "First",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(3898),
+                            InsertedDate = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             InsertedUser = "system",
                             IsActive = true,
                             IsManager = true,
                             LastName = "Admin",
                             Position = "Manager",
                             Salary = 75000m,
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(3909),
+                            UpdatedDate = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUser = "system"
                         },
                         new
@@ -122,14 +122,14 @@ namespace FieldExpenseTracker.Data.Migrations
                             Email = "jane.smith@example.com",
                             EmployeeNumber = "EMP002",
                             FirstName = "Jane",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(3915),
+                            InsertedDate = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             InsertedUser = "system",
                             IsActive = true,
                             IsManager = false,
                             LastName = "Smith",
                             Position = "Employee",
                             Salary = 90000m,
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(3915),
+                            UpdatedDate = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUser = "system"
                         });
                 });
@@ -410,198 +410,198 @@ namespace FieldExpenseTracker.Data.Migrations
                         {
                             Id = 1,
                             Description = "Expenses related to travel and transportation.",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4091),
+                            InsertedDate = new DateTime(2025, 5, 5, 10, 35, 29, 545, DateTimeKind.Local).AddTicks(4273),
                             InsertedUser = "system",
                             IsActive = true,
                             Name = "Travel",
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4092),
+                            UpdatedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8218),
                             UpdatedUser = "system"
                         },
                         new
                         {
                             Id = 2,
                             Description = "Expenses related to meals and dining.",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4094),
+                            InsertedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8234),
                             InsertedUser = "system",
                             IsActive = true,
                             Name = "Food",
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4095),
+                            UpdatedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8235),
                             UpdatedUser = "system"
                         },
                         new
                         {
                             Id = 3,
                             Description = "Expenses for office-related supplies and equipment.",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4096),
+                            InsertedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8236),
                             InsertedUser = "system",
                             IsActive = true,
                             Name = "Office Supplies",
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4097),
+                            UpdatedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8237),
                             UpdatedUser = "system"
                         },
                         new
                         {
                             Id = 4,
                             Description = "Expenses for entertainment and team-building activities.",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4098),
+                            InsertedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8238),
                             InsertedUser = "system",
                             IsActive = true,
                             Name = "Entertainment",
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4099),
+                            UpdatedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8239),
                             UpdatedUser = "system"
                         },
                         new
                         {
                             Id = 5,
                             Description = "Expenses for utilities such as electricity and water.",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4100),
+                            InsertedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8240),
                             InsertedUser = "system",
                             IsActive = true,
                             Name = "Utilities",
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4101),
+                            UpdatedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8241),
                             UpdatedUser = "system"
                         },
                         new
                         {
                             Id = 6,
                             Description = "Other expenses that do not fit into the above categories.",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4102),
+                            InsertedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8242),
                             InsertedUser = "system",
                             IsActive = true,
                             Name = "Miscellaneous",
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4103),
+                            UpdatedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8242),
                             UpdatedUser = "system"
                         },
                         new
                         {
                             Id = 7,
                             Description = "Expenses related to training and development.",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4106),
+                            InsertedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8244),
                             InsertedUser = "system",
                             IsActive = true,
                             Name = "Training",
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4106),
+                            UpdatedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8244),
                             UpdatedUser = "system"
                         },
                         new
                         {
                             Id = 8,
                             Description = "Expenses related to marketing and advertising.",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4107),
+                            InsertedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8245),
                             InsertedUser = "system",
                             IsActive = true,
                             Name = "Marketing",
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4108),
+                            UpdatedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8246),
                             UpdatedUser = "system"
                         },
                         new
                         {
                             Id = 9,
                             Description = "Expenses for entertaining clients or customers.",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4109),
+                            InsertedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8247),
                             InsertedUser = "system",
                             IsActive = true,
                             Name = "Client Entertainment",
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4110),
+                            UpdatedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8248),
                             UpdatedUser = "system"
                         },
                         new
                         {
                             Id = 10,
                             Description = "Expenses related to health and safety measures.",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4111),
+                            InsertedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8249),
                             InsertedUser = "system",
                             IsActive = true,
                             Name = "Health & Safety",
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4112),
+                            UpdatedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8250),
                             UpdatedUser = "system"
                         },
                         new
                         {
                             Id = 11,
                             Description = "Expenses for repairs and maintenance of equipment.",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4113),
+                            InsertedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8251),
                             InsertedUser = "system",
                             IsActive = true,
                             Name = "Repairs & Maintenance",
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4113),
+                            UpdatedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8252),
                             UpdatedUser = "system"
                         },
                         new
                         {
                             Id = 12,
                             Description = "Expenses related to insurance premiums.",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4115),
+                            InsertedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8253),
                             InsertedUser = "system",
                             IsActive = true,
                             Name = "Insurance",
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4115),
+                            UpdatedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8253),
                             UpdatedUser = "system"
                         },
                         new
                         {
                             Id = 13,
                             Description = "Expenses for shipping and delivery services.",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4116),
+                            InsertedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8255),
                             InsertedUser = "system",
                             IsActive = true,
                             Name = "Shipping & Delivery",
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4117),
+                            UpdatedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8255),
                             UpdatedUser = "system"
                         },
                         new
                         {
                             Id = 14,
                             Description = "Expenses for subscriptions to services or publications.",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4118),
+                            InsertedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8257),
                             InsertedUser = "system",
                             IsActive = true,
                             Name = "Subscriptions",
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4119),
+                            UpdatedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8257),
                             UpdatedUser = "system"
                         },
                         new
                         {
                             Id = 15,
                             Description = "Expenses for professional services such as consulting.",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4120),
+                            InsertedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8258),
                             InsertedUser = "system",
                             IsActive = true,
                             Name = "Professional Fees",
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4121),
+                            UpdatedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8259),
                             UpdatedUser = "system"
                         },
                         new
                         {
                             Id = 16,
                             Description = "Expenses related to research and development activities.",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4122),
+                            InsertedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8260),
                             InsertedUser = "system",
                             IsActive = true,
                             Name = "Research & Development",
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4122),
+                            UpdatedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8261),
                             UpdatedUser = "system"
                         },
                         new
                         {
                             Id = 17,
                             Description = "Expenses related to legal services and consultations.",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4124),
+                            InsertedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8262),
                             InsertedUser = "system",
                             IsActive = true,
                             Name = "Legal",
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4124),
+                            UpdatedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8263),
                             UpdatedUser = "system"
                         },
                         new
                         {
                             Id = 18,
                             Description = "Expenses for telecommunications services.",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4126),
+                            InsertedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8264),
                             InsertedUser = "system",
                             IsActive = true,
                             Name = "Telecommunications",
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4126),
+                            UpdatedDate = new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8264),
                             UpdatedUser = "system"
                         });
                 });
@@ -613,6 +613,11 @@ namespace FieldExpenseTracker.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
@@ -678,34 +683,36 @@ namespace FieldExpenseTracker.Data.Migrations
                         new
                         {
                             Id = 1,
+                            Email = "admin@example.com",
                             EmployeeId = 1,
                             FirstName = "System",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4163),
+                            InsertedDate = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             InsertedUser = "system",
                             IsActive = true,
                             LastName = "Administrator",
-                            OpenDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4162),
+                            OpenDate = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PasswordHash = "76c6f58ea9461f1ba60e9b85c0ef5848",
                             Role = 1,
                             Secret = "bc5b9c39e2771571a6eaf9cd2a56508cd5130bf076d414aa42111136f770cb62",
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4164),
+                            UpdatedDate = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUser = "system",
                             UserName = "admin"
                         },
                         new
                         {
                             Id = 2,
+                            Email = "user1@example.com",
                             EmployeeId = 2,
                             FirstName = "System",
-                            InsertedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4167),
+                            InsertedDate = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             InsertedUser = "system",
                             IsActive = true,
                             LastName = "Administrator",
-                            OpenDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4166),
+                            OpenDate = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PasswordHash = "791782c17b595f2a44490c5430370eb5",
-                            Role = 1,
+                            Role = 2,
                             Secret = "9c0cabb913d2a6a6451f4ffbdb900bd68426b5fef1e19f859d6d1bce35c768f9",
-                            UpdatedDate = new DateTime(2025, 5, 4, 12, 10, 53, 955, DateTimeKind.Local).AddTicks(4168),
+                            UpdatedDate = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUser = "system",
                             UserName = "user1"
                         });

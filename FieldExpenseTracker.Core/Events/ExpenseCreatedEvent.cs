@@ -1,3 +1,4 @@
+namespace FieldExpenseTracker.Core.Events;
 public class ExpenseCreatedEvent
 {
     public int ExpenseId { get; set; }

@@ -24,14 +24,16 @@ public class AuthorizationCommandHandler :
     private readonly ITokenService tokenService;
     private readonly JwtConfig jwtConfig;
     private readonly IEventPublisher eventPublisher;
+    private readonly IEmailService _emailService;
 
-    public AuthorizationCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, ITokenService tokenService, JwtConfig jwtConfig, IEventPublisher eventPublisher)
+    public AuthorizationCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, ITokenService tokenService, JwtConfig jwtConfig, IEventPublisher eventPublisher, IEmailService emailService)
     {
         this.unitOfWork = unitOfWork;
         this.mapper = mapper;
         this.tokenService = tokenService;
         this.jwtConfig = jwtConfig;
         this.eventPublisher = eventPublisher;
+        this._emailService = emailService;
     }
      public async Task<ApiResponse<AuthorizationResponse>> Handle(CreateAuthorizationTokenCommand request, CancellationToken cancellationToken)
     {
@@ -97,14 +99,7 @@ public class AuthorizationCommandHandler :
         user.PasswordHash = hashedPassword;
         unitOfWork.UserRepository.Update(user);
         await unitOfWork.Complete();
-
-        await eventPublisher.PublishUserCreatedOrPasswordReset(new UserCreatedOrPasswordResetEvent
-        {
-            Email = user.Email,
-            FullName = user.FirstName + " " + user.LastName,
-            Password = newPassword,
-            Subject = SuccessMessages.yourPasswordResetSuccessfully
-        });
+        await _emailService.SendEmailAsync(user.Email, SuccessMessages.yourPasswordResetSuccessfully,"your new password is:"+newPassword );
         return new ApiResponse(SuccessMessages.passwordResetLinkSent);
     }
 }

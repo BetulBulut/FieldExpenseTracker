@@ -3,6 +3,7 @@ using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Business.Interfaces;
 using FieldExpenseTracker.Core.ApiResponse;
 using FieldExpenseTracker.Core.Enums;
+using FieldExpenseTracker.Core.Events;
 using FieldExpenseTracker.Core.Helpers.Expense;
 using FieldExpenseTracker.Core.Messages;
 using FieldExpenseTracker.Core.Models;
@@ -126,6 +127,13 @@ IRequestHandler<CreateMultipleExpenseCommand, ApiResponse<CreateMultipleExpenseR
             item.Status = StatusEnum.Pending;
             item.ExpenseNumber = ExpenseNumberGenerator.GenerateExpenseNumber();
             await unitOfWork.ExpenseRepository.AddAsync(item);
+            eventPublisher.PublishExpenseCreated(new ExpenseCreatedEvent
+            {
+                EmployeeName = appSession.UserName,
+                Amount = item.Amount,
+                Description = item.Description,
+                CreatedAt = DateTime.Now
+            });
         }
         unitOfWork.Complete();
         var mapped = mapper.Map<CreateMultipleExpenseResponse>(entity);

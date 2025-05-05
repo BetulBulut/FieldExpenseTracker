@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using FieldExpenseTracker.Business.Interfaces;
+using FieldExpenseTracker.Core.Enums;
 using FieldExpenseTracker.Core.Models;
 using FieldExpenseTracker.Data;
 using Microsoft.EntityFrameworkCore;
@@ -85,5 +86,13 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await context.Set<TEntity>().AnyAsync(predicate);
+    }
+     public async Task<List<string>> GetAdminEmailsAsync()
+    {
+        return await context.Set<User>()
+            .Where(u => u.IsActive)
+            .Where(u => u.Role == RoleEnum.Admin)
+            .Select(u => u.Email)
+            .ToListAsync();
     }
 }

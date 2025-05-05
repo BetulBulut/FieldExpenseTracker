@@ -16,4 +16,5 @@ public interface IGenericRepository<TEntity> where TEntity : BaseModel
     void Delete(TEntity entity);
     Task DeleteByIdAsync(long id);
     Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate);
+    Task<List<string>> GetAdminEmailsAsync();
 }

@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace FieldExpenseTracker.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class secondmig : Migration
+    public partial class initialmig : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -146,6 +148,7 @@ namespace FieldExpenseTracker.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Secret = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Role = table.Column<int>(type: "int", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
@@ -185,8 +188,10 @@ namespace FieldExpenseTracker.Data.Migrations
                     Status = table.Column<int>(type: "int", nullable: false),
                     Currency = table.Column<int>(type: "int", nullable: false),
                     ExpenseNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    ResponsedByUserId = table.Column<int>(type: "int", nullable: false),
-                    ResponsedByUserName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ResponsedByUserId = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    ResponsedByUserName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    ResponseDescription = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    ResponseDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     InsertedUser = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UpdatedUser = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     InsertedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -208,6 +213,50 @@ namespace FieldExpenseTracker.Data.Migrations
                         principalTable: "ExpenseCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Employees",
+                columns: new[] { "Id", "DateOfJoining", "Department", "Email", "EmployeeNumber", "FirstName", "InsertedDate", "InsertedUser", "IsActive", "IsManager", "LastName", "Position", "Salary", "UpdatedDate", "UpdatedUser" },
+                values: new object[] { 1, new DateTime(2020, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "Management", "first.admin@example.com", "EMP001", "First", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "system", true, true, "Admin", "Manager", 75000m, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "system" });
+
+            migrationBuilder.InsertData(
+                table: "Employees",
+                columns: new[] { "Id", "DateOfJoining", "Department", "Email", "EmployeeNumber", "FirstName", "InsertedDate", "InsertedUser", "IsActive", "LastName", "Position", "Salary", "UpdatedDate", "UpdatedUser" },
+                values: new object[] { 2, new DateTime(2018, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "IT", "jane.smith@example.com", "EMP002", "Jane", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "system", true, "Smith", "Employee", 90000m, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "system" });
+
+            migrationBuilder.InsertData(
+                table: "ExpenseCategories",
+                columns: new[] { "Id", "Description", "InsertedDate", "InsertedUser", "IsActive", "Name", "UpdatedDate", "UpdatedUser" },
+                values: new object[,]
+                {
+                    { 1, "Expenses related to travel and transportation.", new DateTime(2025, 5, 5, 10, 35, 29, 545, DateTimeKind.Local).AddTicks(4273), "system", true, "Travel", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8218), "system" },
+                    { 2, "Expenses related to meals and dining.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8234), "system", true, "Food", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8235), "system" },
+                    { 3, "Expenses for office-related supplies and equipment.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8236), "system", true, "Office Supplies", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8237), "system" },
+                    { 4, "Expenses for entertainment and team-building activities.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8238), "system", true, "Entertainment", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8239), "system" },
+                    { 5, "Expenses for utilities such as electricity and water.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8240), "system", true, "Utilities", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8241), "system" },
+                    { 6, "Other expenses that do not fit into the above categories.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8242), "system", true, "Miscellaneous", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8242), "system" },
+                    { 7, "Expenses related to training and development.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8244), "system", true, "Training", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8244), "system" },
+                    { 8, "Expenses related to marketing and advertising.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8245), "system", true, "Marketing", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8246), "system" },
+                    { 9, "Expenses for entertaining clients or customers.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8247), "system", true, "Client Entertainment", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8248), "system" },
+                    { 10, "Expenses related to health and safety measures.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8249), "system", true, "Health & Safety", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8250), "system" },
+                    { 11, "Expenses for repairs and maintenance of equipment.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8251), "system", true, "Repairs & Maintenance", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8252), "system" },
+                    { 12, "Expenses related to insurance premiums.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8253), "system", true, "Insurance", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8253), "system" },
+                    { 13, "Expenses for shipping and delivery services.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8255), "system", true, "Shipping & Delivery", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8255), "system" },
+                    { 14, "Expenses for subscriptions to services or publications.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8257), "system", true, "Subscriptions", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8257), "system" },
+                    { 15, "Expenses for professional services such as consulting.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8258), "system", true, "Professional Fees", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8259), "system" },
+                    { 16, "Expenses related to research and development activities.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8260), "system", true, "Research & Development", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8261), "system" },
+                    { 17, "Expenses related to legal services and consultations.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8262), "system", true, "Legal", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8263), "system" },
+                    { 18, "Expenses for telecommunications services.", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8264), "system", true, "Telecommunications", new DateTime(2025, 5, 5, 10, 35, 29, 546, DateTimeKind.Local).AddTicks(8264), "system" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Email", "EmployeeId", "FirstName", "InsertedDate", "InsertedUser", "IsActive", "LastLoginDate", "LastName", "OpenDate", "PasswordHash", "Role", "Secret", "UpdatedDate", "UpdatedUser", "UserName" },
+                values: new object[,]
+                {
+                    { 1, "admin@example.com", 1, "System", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "system", true, null, "Administrator", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "76c6f58ea9461f1ba60e9b85c0ef5848", 1, "bc5b9c39e2771571a6eaf9cd2a56508cd5130bf076d414aa42111136f770cb62", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "system", "admin" },
+                    { 2, "user1@example.com", 2, "System", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "system", true, null, "Administrator", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "791782c17b595f2a44490c5430370eb5", 2, "9c0cabb913d2a6a6451f4ffbdb900bd68426b5fef1e19f859d6d1bce35c768f9", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "system", "user1" }
                 });
 
             migrationBuilder.CreateIndex(

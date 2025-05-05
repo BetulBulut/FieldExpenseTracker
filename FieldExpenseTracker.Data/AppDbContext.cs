@@ -3,6 +3,7 @@ using FieldExpenseTracker.Core.Session;
 using FieldExpenseTracker.Data.Configurations;
 using FieldExpenseTracker.Data.Seeds;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -32,6 +33,10 @@ public class AppDbContext : DbContext
         ExpenseCategorySeeder.Seed(modelBuilder);
         UserSeeder.Seed(modelBuilder);
         base.OnModelCreating(modelBuilder);
+    }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
     }
 
     public virtual Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

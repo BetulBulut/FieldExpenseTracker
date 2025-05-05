@@ -21,6 +21,9 @@ namespace FieldExpenseTracker.Data.Configurations
                 .HasMaxLength(300);
             builder.Property(u => u.Secret)
                 .HasMaxLength(100);
+            builder.Property(u => u.Email)
+                .IsRequired()
+                .HasMaxLength(50);
             builder.Property(u => u.Role)
                 .IsRequired()
                 .HasConversion<int>();

@@ -53,7 +53,7 @@ IRequestHandler<GetPendingExpenses, ApiResponse<List<ExpenseResponse>>>
         if (request.ResponsedByUserName != null)
             predicate = predicate.And(x => x.ResponsedByUserName == request.ResponsedByUserName);
 
-        var entities = await unitOfWork.ExpenseRepository.GetAllAsync(predicate, "Employee", "ExpenseCategory");
+        var entities = await unitOfWork.ExpenseRepository.GetAllAsync(predicate);
         if (entities == null || !entities.Any())
             return new ApiResponse<List<ExpenseResponse>>(ErrorMessages.noExpenseFound);
 

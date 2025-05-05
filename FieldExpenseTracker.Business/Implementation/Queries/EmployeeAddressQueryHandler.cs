@@ -44,7 +44,7 @@ IRequestHandler<GetAllEmployeeAddressesQuery, ApiResponse<List<EmployeeAddressRe
         if (!string.IsNullOrEmpty(request.Country))
             predicate = predicate.And(x => x.Country.Contains(request.Country));
 
-        var entities = await unitOfWork.EmployeeAddressRepository.GetAllAsync(predicate, "Employee");
+        var entities = await unitOfWork.EmployeeAddressRepository.GetAllAsync(predicate);
         if (entities == null || !entities.Any())
             return new ApiResponse<List<EmployeeAddressResponse>>(ErrorMessages.noAddressFound);
 

@@ -2,28 +2,47 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
+using MailKit.Net.Smtp;
+using MimeKit;
+using Microsoft.Extensions.Configuration;
+using MailKit.Security;
+
 namespace FieldExpenseTracker.Business.Services;
 public interface IEmailService
 {
     Task SendEmailAsync(string to, string subject, string body);
 }
 
-public class EmailService : IEmailService
+public class EmailService: IEmailService
 {
-    public Task SendEmailAsync(string to, string subject, string body)
+    private readonly IConfiguration _configuration;
+
+    public EmailService(IConfiguration configuration)
     {
-        var smtp = new SmtpClient("smtp.example.com")  // Gmail için smtp.gmail.com
-        {
-            Port = 587,
-            Credentials = new NetworkCredential("your-email@example.com", "your-password"),
-            EnableSsl = true
-        };
+        _configuration = configuration;
+    }
 
-        var message = new MailMessage("your-email@example.com", to, subject, body)
-        {
-            IsBodyHtml = true
-        };
+    public async Task SendEmailAsync(string to, string subject, string body)
+    {
+        var emailMessage = new MimeMessage();
 
-        return smtp.SendMailAsync(message);
+        emailMessage.From.Add(new MailboxAddress("Field Expense System", _configuration["Email:From"]));
+        emailMessage.To.Add(new MailboxAddress("", to));
+        emailMessage.Subject = subject;
+
+        var bodyBuilder = new BodyBuilder { HtmlBody = body };
+        emailMessage.Body = bodyBuilder.ToMessageBody();
+
+        using var client = new MailKit.Net.Smtp.SmtpClient();
+        var smtpPort = _configuration["Email:SmtpPort"];
+        if (string.IsNullOrEmpty(smtpPort))
+        {
+            throw new InvalidOperationException("SMTP port configuration is missing.");
+        }
+        await client.ConnectAsync(_configuration["Email:SmtpHost"], int.Parse(smtpPort), SecureSocketOptions.StartTls);
+        await client.AuthenticateAsync(_configuration["Email:From"], _configuration["Email:Password"]);
+        await client.SendAsync(emailMessage);
+        await client.DisconnectAsync(true);
     }
 }
+
