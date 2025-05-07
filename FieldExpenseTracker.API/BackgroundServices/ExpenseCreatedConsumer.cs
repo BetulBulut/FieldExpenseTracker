@@ -38,7 +38,7 @@ public class ExpenseCreatedConsumer : BackgroundService
                              autoAck: true,
                              consumer: consumer);
 
-        Console.WriteLine("ExpenseCreatedConsumer is now listening for messages.");
+        
         return Task.CompletedTask;
     }
 

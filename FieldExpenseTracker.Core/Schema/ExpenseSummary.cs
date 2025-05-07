@@ -15,12 +15,6 @@ public class EmployeeExpenseDto
     public string PaymentMethod { get; set; }
 }
 
-public class CompanyExpenseSummaryDto
-{
-    public DateTime Date { get; set; }
-    public int TotalRequests { get; set; }
-    public decimal TotalAmount { get; set; }
-}
 
 public class EmployeeExpenseStatDto
 {

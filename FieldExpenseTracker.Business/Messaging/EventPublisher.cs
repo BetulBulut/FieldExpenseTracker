@@ -47,13 +47,9 @@ public class EventPublisher : IEventPublisher
                              routingKey: "expense_created_queue",
                              basicProperties: properties,
                              body: body);
-        await _emailService.SendEmailAsync(
-                    to: "bulut.betulbb@gmail.com",
-                    subject: "New Expense Request",
-                    body: $"<p>New expense request created by {expenseEvent.EmployeeName}</p>"
-                );
-        // Örnek: Admin e-postalarını alıp e-posta gönderme
-        /*var adminEmails = await _unitOfWork.UserRepository.GetAdminEmailsAsync();
+        
+        
+        var adminEmails = await _unitOfWork.UserRepository.GetAdminEmailsAsync();
         foreach (var email in adminEmails)
         {
             await _emailService.SendEmailAsync(
@@ -61,7 +57,7 @@ public class EventPublisher : IEventPublisher
                 subject: "New Expense Request created",
                 body: $"New expense request created by {expenseEvent.EmployeeName}."
             );
-        }*/
+        }
         
     }
 }

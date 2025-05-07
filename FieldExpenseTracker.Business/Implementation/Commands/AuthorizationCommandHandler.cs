@@ -77,7 +77,7 @@ public class AuthorizationCommandHandler :
             return new ApiResponse(ErrorMessages.userNotFound);
 
         var hashedPassword = PasswordGenerator.CreateMD5(request.Request.OldPassword, user.Secret);
-        if (hashedPassword != user.PasswordHash)
+        if (hashedPassword.ToUpper() != user.PasswordHash.ToUpper())
             return new ApiResponse(ErrorMessages.oldPasswordIsIncorrect);
 
         var newHashedPassword = PasswordGenerator.CreateMD5(request.Request.NewPassword, user.Secret);

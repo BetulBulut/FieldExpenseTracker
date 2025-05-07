@@ -7,6 +7,7 @@ namespace FieldExpenseTracker.Core.Schema
         public int ExpenseCategoryId { get; set; }
         public DateTime Date { get; set; }
         public string ReceiptImagePath { get; set; }
+        public int PaymentMethodId { get; set; }
         public string Currency { get; set; }
     }
 
@@ -28,6 +29,7 @@ namespace FieldExpenseTracker.Core.Schema
         public int ResponsedByUserId { get; set; }
         public string ResponsedByUserName { get; set; }
         public string ResponseDescription { get; set; }
+        public int PaymentMethodId { get; set; }
         public DateTime? ResponseDate { get; set; }
     }
 

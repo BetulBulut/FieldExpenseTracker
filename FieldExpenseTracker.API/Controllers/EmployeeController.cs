@@ -18,6 +18,7 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpGet("GetAll")]
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse<List<EmployeeResponse>>> GetAll()
     {
         var operation = new GetAllEmployeesQuery();
@@ -25,6 +26,7 @@ public class EmployeeController : ControllerBase
         return result;
     }
     [HttpGet("GetAllByParameter")]
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse<List<EmployeeResponse>>> GetAllByParameter([FromQuery] string? firstName, [FromQuery] string? lastName, [FromQuery] string? position, [FromQuery] string? department)
     {
         var operation = new GetAllEmployeesByParameterQuery(firstName, lastName, position, department);
@@ -33,6 +35,7 @@ public class EmployeeController : ControllerBase
     }
     
     [HttpGet("GetById/{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse<EmployeeResponse>> GetById([FromRoute] int id)
     {
         var operation = new GetEmployeeByIdQuery(id);
@@ -41,6 +44,7 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse<EmployeeResponse>> Post([FromBody] EmployeeRequest Employee)
     {
         var operation = new CreateEmployeeCommand(Employee);
@@ -49,6 +53,7 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse> Put([FromRoute] int id, [FromBody] EmployeeRequest Employee)
     {
         var operation = new UpdateEmployeeCommand(id, Employee);
@@ -56,6 +61,7 @@ public class EmployeeController : ControllerBase
         return result;
     }
     [HttpDelete("{id}")]    
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse> Delete([FromRoute] int id)
     {
         var operation = new DeleteEmployeeCommand(id);

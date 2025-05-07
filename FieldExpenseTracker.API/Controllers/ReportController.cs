@@ -18,6 +18,7 @@ public class ReportController : ControllerBase
         this.mediator = mediator;
     }
     [HttpGet("employee-expenses/{employeeId}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetEmployeeExpenses(int employeeId)
     {
         var operation =new GetEmployeeExpensesQuery(employeeId );
@@ -26,25 +27,28 @@ public class ReportController : ControllerBase
     }
 
     [HttpGet("company-expense-summary")]
-    public async Task<IActionResult> GetCompanyExpenseSummary([FromQuery] DateTime from, [FromQuery] DateTime to)
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetCompanyExpenseSummary([FromQuery] int fromYear, [FromQuery] int toYear)
     {
-        var query = new GetCompanyExpenseSummaryQuery (from, to);
+        var query = new GetCompanyExpenseSummaryQuery (fromYear, toYear);
         var result = await mediator.Send(query);
         return Ok(result);
     }
 
     [HttpGet("employee-expense-stats")]
-    public async Task<IActionResult> GetEmployeeExpenseStats([FromQuery] DateTime from, [FromQuery] DateTime to)
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetEmployeeExpenseStats([FromQuery] int fromYear, [FromQuery] int toYear)
     {
-        var query = new GetEmployeeExpenseStatsQuery (from, to);
+        var query = new GetEmployeeExpenseStatsQuery (fromYear, toYear);
         var result = await mediator.Send(query);
         return Ok(result);
     }
     
     [HttpGet("approval-stats")]
-    public async Task<IActionResult> GetApprovalStats([FromQuery] DateTime from, [FromQuery] DateTime to)
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetApprovalStats([FromQuery] int fromYear, [FromQuery] int toYear)
     {
-        var query = new GetApprovalStatsQuery (from, to);
+        var query = new GetApprovalStatsQuery (fromYear, toYear);
         var result = await mediator.Send(query);
         return Ok(result);
     }

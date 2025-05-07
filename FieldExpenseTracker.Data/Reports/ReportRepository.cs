@@ -13,12 +13,13 @@ public class ReportRepository : IReportRepository
           _connection = dbConnection;
       }
 
-      public async Task<IEnumerable<ExpenseSummaryDto>> GetCompanyExpenseSummaryAsync(DateTime from, DateTime to)
+      public async Task<IEnumerable<ExpenseSummaryDto>> GetCompanyExpenseSummaryAsync(int fromYear, int toYear)
       {
+          var from = new DateTime(fromYear, 1, 1);
+          var to = new DateTime(toYear, 12, 31);
+      
           using (var connection = _connection){
-              var parameters = new DynamicParameters();
-          parameters.Add("@FromDate", from);
-          parameters.Add("@ToDate", to);
+              var parameters = new {StartDate = from, EndDate = to};
 
           var result = await _connection.QueryAsync<ExpenseSummaryDto>(
               "sp_GetCompanyExpenseSummary",
@@ -42,11 +43,13 @@ public class ReportRepository : IReportRepository
           return result;
           }
       }
-      public async Task<IEnumerable<EmployeeExpenseStatDto>> GetEmployeeExpenseStatsAsync(DateTime from, DateTime to)
+      public async Task<IEnumerable<EmployeeExpenseStatDto>> GetEmployeeExpenseStatsAsync(int fromYear, int toYear)
       {
+          var from = new DateTime(fromYear, 1, 1);
+          var to = new DateTime(toYear, 12, 31);
           using (var connection = _connection){
           
-          var parameters = new {FromDate = from, ToDate = to};
+          var parameters = new {StartDate = from, EndDate = to};
 
           var result = await _connection.QueryAsync<EmployeeExpenseStatDto>(
               "sp_GetEmployeeExpenseStats",
@@ -57,17 +60,19 @@ public class ReportRepository : IReportRepository
           }
 
       }
-      public async Task<IEnumerable<ApprovalStatDto>> GetApprovalStatsAsync(DateTime from, DateTime to)
-      {
-          using (var connection = _connection){
-          var parameters = new {FromDate = from, ToDate = to};
+        public async Task<IEnumerable<ApprovalStatDto>> GetApprovalStatsAsync(int fromYear, int toYear)
+        {
+        var from = new DateTime(fromYear, 1, 1);
+        var to = new DateTime(toYear, 12, 31);
+        using (var connection = _connection){
+        var parameters = new {StartDate = from, EndDate = to};
 
-          var result = await _connection.QueryAsync<ApprovalStatDto>(
-              "sp_GetApprovalStats",
-              parameters,
-              commandType: CommandType.StoredProcedure);
+        var result = await _connection.QueryAsync<ApprovalStatDto>(
+            "sp_GetApprovalStats",
+            parameters,
+            commandType: CommandType.StoredProcedure);
 
-          return result;
-          }
-      }
+        return result;
+        }
+        }
 }

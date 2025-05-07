@@ -7,7 +7,7 @@ namespace FieldExpenseTracker.Business.Implementation.Cqrs;
 
 
 public record GetEmployeeExpensesQuery(int EmployeeId) : IRequest<ApiResponse<IEnumerable<EmployeeExpenseDto>>>;
-public record GetCompanyExpenseSummaryQuery(DateTime From, DateTime To) : IRequest<ApiResponse<IEnumerable<ExpenseSummaryDto>>>;
-public record GetEmployeeExpenseStatsQuery(DateTime From, DateTime To) : IRequest<ApiResponse<IEnumerable<EmployeeExpenseStatDto>>>;
-public record GetApprovalStatsQuery(DateTime From, DateTime To) : IRequest<ApiResponse<IEnumerable<ApprovalStatDto>>>;
+public record GetCompanyExpenseSummaryQuery(int FromYear, int ToYear) : IRequest<ApiResponse<IEnumerable<ExpenseSummaryDto>>>;
+public record GetEmployeeExpenseStatsQuery(int FromYear, int ToYear) : IRequest<ApiResponse<IEnumerable<EmployeeExpenseStatDto>>>;
+public record GetApprovalStatsQuery(int FromYear, int ToYear) : IRequest<ApiResponse<IEnumerable<ApprovalStatDto>>>;
 

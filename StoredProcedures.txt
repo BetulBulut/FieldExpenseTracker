@@ -1,0 +1,56 @@
+CREATE PROCEDURE sp_GetEmployeeExpenses
+@EmployeeId INT
+AS
+BEGIN
+SELECT e.Id, e.Description, e.Amount, e.Status, e.InsertedDate, c.Name AS ExpenseCategory, p.Name AS PaymentMethod
+FROM Expenses e
+JOIN ExpenseCategories c ON [c.Id](http://c.id/) = e.ExpenseCategoryId
+JOIN PaymentMethods p ON [p.Id](http://p.id/) = e.PaymentMethodId
+WHERE e.EmployeeId = @EmployeeId
+ORDER BY e.InsertedDate DESC
+END
+
+CREATE PROCEDURE sp_GetCompanyExpenseSummary
+@StartDate DATE,
+@EndDate DATE
+AS
+BEGIN
+SELECT
+CAST(e.InsertedDate AS DATE) AS Date,
+COUNT(*) AS TotalRequests,
+SUM(e.Amount) AS TotalAmount
+FROM Expenses e
+WHERE e.InsertedDate BETWEEN @StartDate AND @EndDate
+GROUP BY CAST(e.InsertedDate AS DATE)
+ORDER BY Date
+END
+
+CREATE PROCEDURE sp_GetEmployeeExpenseStats
+@StartDate DATE,
+@EndDate DATE
+AS
+BEGIN
+SELECT
+e.EmployeeId,
+u.UserName,
+COUNT(*) AS TotalExpenses,
+SUM(e.Amount) AS TotalAmount
+FROM Expenses e
+JOIN Users u ON u.Id = e.EmployeeId
+WHERE e.InsertedDate BETWEEN @StartDate AND @EndDate
+GROUP BY e.EmployeeId, u.UserName
+END
+
+CREATE PROCEDURE sp_GetApprovalStats
+@StartDate DATE,
+@EndDate DATE
+AS
+BEGIN
+SELECT
+e.Status,
+COUNT(*) AS RequestCount,
+SUM(e.Amount) AS TotalAmount
+FROM Expenses e
+WHERE e.Date BETWEEN @StartDate AND @EndDate
+GROUP BY e.Status
+END

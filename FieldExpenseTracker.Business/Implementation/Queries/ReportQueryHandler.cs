@@ -32,7 +32,7 @@ public class ReportQueryHandler :
     }
     public async Task<ApiResponse<IEnumerable<ExpenseSummaryDto>>> Handle(GetCompanyExpenseSummaryQuery request, CancellationToken cancellationToken)
     {
-        var result = await reportRepository.GetCompanyExpenseSummaryAsync(request.From, request.To);
+        var result = await reportRepository.GetCompanyExpenseSummaryAsync(request.FromYear, request.ToYear);
         if (result == null || !result.Any())
             return new ApiResponse<IEnumerable<ExpenseSummaryDto>>(ErrorMessages.noDataFound);
 
@@ -41,7 +41,7 @@ public class ReportQueryHandler :
 
     public async Task<ApiResponse<IEnumerable<EmployeeExpenseStatDto>>> Handle(GetEmployeeExpenseStatsQuery request, CancellationToken cancellationToken)
     {
-        var result = await reportRepository.GetEmployeeExpenseStatsAsync(request.From, request.To);
+        var result = await reportRepository.GetEmployeeExpenseStatsAsync(request.FromYear, request.ToYear);
         if (result == null || !result.Any())
             return new ApiResponse<IEnumerable<EmployeeExpenseStatDto>>(ErrorMessages.noDataFound);
 
@@ -50,7 +50,7 @@ public class ReportQueryHandler :
 
     public async Task<ApiResponse<IEnumerable<ApprovalStatDto>>> Handle(GetApprovalStatsQuery request, CancellationToken cancellationToken)
     {
-        var result = await reportRepository.GetApprovalStatsAsync(request.From, request.To);
+        var result = await reportRepository.GetApprovalStatsAsync(request.FromYear, request.ToYear);
         if (result == null || !result.Any())
             return new ApiResponse<IEnumerable<ApprovalStatDto>>(ErrorMessages.noDataFound);
 

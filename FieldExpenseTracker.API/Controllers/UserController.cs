@@ -2,6 +2,7 @@ using FieldExpenseTracker.Business.Implementation.Cqrs;
 using FieldExpenseTracker.Core.ApiResponse;
 using FieldExpenseTracker.Core.Schema;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -18,6 +19,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("GetAll")]
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse<List<UserResponse>>> GetAll()
     {
         var operation = new GetAllUsersQuery();
@@ -26,6 +28,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("GetById/{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse<UserResponse>> GetById([FromRoute] int id)
     {
         var operation = new GetUserByIdQuery(id);
@@ -33,6 +36,7 @@ public class UserController : ControllerBase
         return result;
     }
     [HttpGet("GetByEmployeeNumber")]
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse<UserResponse>> GetByEmployeeNumber([FromQuery] string employeeNumber)
     {
         var operation = new GetUserByEmployeeNumberQuery(employeeNumber);
@@ -40,6 +44,7 @@ public class UserController : ControllerBase
         return result;
     }
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse<UserRegisterResponse>> Post([FromBody] UserRequest User)
     {
         var operation = new CreateUserCommand(User);
@@ -48,13 +53,15 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse> Put([FromRoute] int id, [FromBody] UserRequest User)
     {
         var operation = new UpdateUserCommand(id, User);
         var result = await mediator.Send(operation);
         return result;
     }
-    [HttpDelete("{id}")]    
+    [HttpDelete("{id}")]   
+    [Authorize(Roles = "Admin")] 
     public async Task<ApiResponse> Delete([FromRoute] int id)
     {
         var operation = new DeleteUserCommand(id);

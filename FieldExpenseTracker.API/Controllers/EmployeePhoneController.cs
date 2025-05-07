@@ -18,6 +18,7 @@ public class EmployeePhoneController : ControllerBase
     }
 
     [HttpGet("GetAll")]
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse<List<EmployeePhoneResponse>>> GetAllByParameter()
     {
         var operation = new GetAllEmployeePhonesQuery();
@@ -26,6 +27,7 @@ public class EmployeePhoneController : ControllerBase
     }
 
     [HttpGet("GetById/{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse<EmployeePhoneResponse>> GetById([FromRoute] int id)
     {
         var operation = new GetEmployeePhoneByIdQuery(id);
@@ -34,6 +36,7 @@ public class EmployeePhoneController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse<EmployeePhoneResponse>> Post([FromBody] EmployeePhoneRequest EmployeePhone)
     {
         var operation = new CreateEmployeePhoneCommand(EmployeePhone);
@@ -42,6 +45,7 @@ public class EmployeePhoneController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse> Put([FromRoute] int id, [FromBody] EmployeePhoneRequest EmployeePhone)
     {
         var operation = new UpdateEmployeePhoneCommand(id, EmployeePhone);
@@ -49,6 +53,7 @@ public class EmployeePhoneController : ControllerBase
         return result;
     }
     [HttpDelete("{id}")]    
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse> Delete([FromRoute] int id)
     {
         var operation = new DeleteEmployeePhoneCommand(id);

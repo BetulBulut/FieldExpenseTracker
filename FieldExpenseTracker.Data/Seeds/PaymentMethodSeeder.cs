@@ -16,7 +16,8 @@ public static class PaymentMethodSeeder
                 InsertedDate = new DateTime(2023, 1, 1),
                 InsertedUser = "system",
                 UpdatedDate = new DateTime(2023, 1, 1),
-                UpdatedUser = "system"
+                UpdatedUser = "system",
+                IsActive = true
             },
             new PaymentMethod
             {
@@ -26,7 +27,8 @@ public static class PaymentMethodSeeder
                 InsertedDate = new DateTime(2023, 1, 1),
                 InsertedUser = "system",
                 UpdatedDate = new DateTime(2023, 1, 1),
-                UpdatedUser = "system"
+                UpdatedUser = "system",
+                IsActive = true
             },
             new PaymentMethod
             {
@@ -36,7 +38,8 @@ public static class PaymentMethodSeeder
                 InsertedDate = new DateTime(2023, 1, 1),
                 InsertedUser = "system",
                 UpdatedDate = new DateTime(2023, 1, 1),
-                UpdatedUser = "system"
+                UpdatedUser = "system",
+                IsActive = true
             },
             new PaymentMethod
             {
@@ -46,7 +49,8 @@ public static class PaymentMethodSeeder
                 InsertedDate = new DateTime(2023, 1, 1),
                 InsertedUser = "system",
                 UpdatedDate = new DateTime(2023, 1, 1),
-                UpdatedUser = "system"
+                UpdatedUser = "system",
+                IsActive = true
             },
             new PaymentMethod
             {
@@ -56,7 +60,8 @@ public static class PaymentMethodSeeder
                 InsertedDate = new DateTime(2023, 1, 1),
                 InsertedUser = "system",
                 UpdatedDate = new DateTime(2023, 1, 1),
-                UpdatedUser = "system"
+                UpdatedUser = "system",
+                IsActive = true
             }
         );
     }

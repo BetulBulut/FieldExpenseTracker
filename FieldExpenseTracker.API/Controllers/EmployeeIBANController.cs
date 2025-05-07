@@ -19,6 +19,7 @@ public class EmployeeIBANController : ControllerBase
     }
 
     [HttpGet("GetAll")]
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse<List<EmployeeIBANResponse>>> GetAllByParameter()
     {
         var operation = new GetAllEmployeeIBANsQuery();
@@ -27,6 +28,7 @@ public class EmployeeIBANController : ControllerBase
     }
 
     [HttpGet("GetById/{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse<EmployeeIBANResponse>> GetById([FromRoute] int id)
     {
         var operation = new GetEmployeeIBANByIdQuery(id);
@@ -35,6 +37,7 @@ public class EmployeeIBANController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse<EmployeeIBANResponse>> Post([FromBody] EmployeeIBANRequest EmployeeIBAN)
     {
         var operation = new CreateEmployeeIBANCommand(EmployeeIBAN);
@@ -43,6 +46,7 @@ public class EmployeeIBANController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse> Put([FromRoute] int id, [FromBody] EmployeeIBANRequest EmployeeIBAN)
     {
         var operation = new UpdateEmployeeIBANCommand(id, EmployeeIBAN);
@@ -50,6 +54,7 @@ public class EmployeeIBANController : ControllerBase
         return result;
     }
     [HttpDelete("{id}")]    
+    [Authorize(Roles = "Admin")]
     public async Task<ApiResponse> Delete([FromRoute] int id)
     {
         var operation = new DeleteEmployeeIBANCommand(id);

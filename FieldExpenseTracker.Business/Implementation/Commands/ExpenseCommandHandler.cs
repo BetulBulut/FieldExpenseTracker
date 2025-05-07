@@ -11,7 +11,6 @@ using FieldExpenseTracker.Core.Models;
 using FieldExpenseTracker.Core.Schema;
 using FieldExpenseTracker.Core.Session;
 using MediatR;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace FieldExpenseTracker.Business.Implementation.Commands;
 
@@ -112,12 +111,9 @@ IRequestHandler<CreateMultipleExpenseCommand, ApiResponse<CreateMultipleExpenseR
         entity.ResponseDate = DateTime.Now;
         entity.ResponseDescription = request.Expense.ResponseDescription;
         unitOfWork.ExpenseRepository.Update(entity);
-        unitOfWork.Complete();
-        if (entity.Status == StatusEnum.Approved)
-        {
-            paymentService.SimulatePayment(entity);
-        }
-
+        await unitOfWork.Complete();
+       
+        paymentService.SimulatePayment(entity);
         var mapped = mapper.Map<ExpenseResponse>(entity);
         mapped.StatusName = entity.Status.ToString();
         return new ApiResponse<ExpenseResponse>(mapped);

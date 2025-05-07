@@ -4,7 +4,7 @@ namespace FieldExpenseTracker.Data.Reports;
 public interface IReportRepository
 {
     Task<IEnumerable<EmployeeExpenseDto>> GetEmployeeExpensesAsync(int employeeId);
-    Task<IEnumerable<ExpenseSummaryDto>> GetCompanyExpenseSummaryAsync(DateTime from, DateTime to);
-    Task<IEnumerable<EmployeeExpenseStatDto>> GetEmployeeExpenseStatsAsync(DateTime from, DateTime to);
-    Task<IEnumerable<ApprovalStatDto>> GetApprovalStatsAsync(DateTime from, DateTime to);
+    Task<IEnumerable<ExpenseSummaryDto>> GetCompanyExpenseSummaryAsync(int fromYear, int toYear);
+    Task<IEnumerable<EmployeeExpenseStatDto>> GetEmployeeExpenseStatsAsync(int fromYear, int toYear);
+    Task<IEnumerable<ApprovalStatDto>> GetApprovalStatsAsync(int fromYear, int toYear);
 }
