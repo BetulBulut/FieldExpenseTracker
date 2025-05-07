@@ -65,6 +65,7 @@ FieldExpenseTracker
     "Audience": "FieldExpenseTracker",
     "AccessTokenExpiration": 55
 }
+```
 
 ```json
   "Email": {
