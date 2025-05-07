@@ -25,9 +25,13 @@ https://documenter.getpostman.com/view/26371085/2sB2j7d9MH
 FieldExpenseTracker
 │
 ├── FieldExpenseTracker.API → API Katmanı (Başlangıç Projesi)
+
 ├── FieldExpenseTracker.Business → İş kuralları (Servisler, DTO'lar)
+
 ├── FieldExpenseTracker.Core → Entity'ler, Interface'ler, Ortak Yapılar
+
 ├── FieldExpenseTracker.Data → EF DbContext, Repository, Configs, Seeds
+
 
 ![alt text](image.png)
 
