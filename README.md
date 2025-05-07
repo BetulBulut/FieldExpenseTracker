@@ -57,17 +57,12 @@ FieldExpenseTracker
 "ConnectionStrings": {
   "SqlServer": "your-sql-connection-string"
 }
-
-```json
 "JwtConfig": {
     "Secret": "your-secret-key",
     "Issuer": "FieldExpenseTracker",
     "Audience": "FieldExpenseTracker",
     "AccessTokenExpiration": 55
 }
-```
-
-```json
   "Email": {
     "From": "your-source-gmail",
     "Password": "your-google-app-password",
@@ -75,7 +70,7 @@ FieldExpenseTracker
     "SmtpPort": "587"
    }
 
----
+```
 
 ### 3.🛠️ Migration Oluşturma ve Uygulama
 
@@ -83,14 +78,14 @@ FieldExpenseTracker
 cd FieldExpenseTracker.Data
 dotnet ef migrations add initialMigration  --output-dir .\Migrations --startup-project ..\FieldExpenseTracker.API
 dotnet ef database update
-
+```
 ## Çalıştırma
 
 ```bash
 cd FieldExpenseTracker.API
 dotnet run
 
----
+```
 
 ### 4. 📌 Temel Özellikler
 
@@ -111,7 +106,7 @@ dotnet run
 
 ✅ EF Fluent API + Seed Data ile Sağlam DB Tasarımı
 
----
+
 
 ### 5. 📬 RabbitMQ Kullanımı
 
